@@ -120,6 +120,7 @@
     <Content Include="About.aspx" />
     <Content Include="Cart.aspx" />
     <Content Include="Checkout.aspx" />
+    <Content Include="Wishlist.aspx" />
     <Content Include="MyPage.aspx" />
     <Content Include="ThankYou.aspx" />
     <Content Include="ProductDetail.aspx" />
@@ -237,6 +238,13 @@
       <DependentUpon>Checkout.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\MyPageController.cs" />
+    <Compile Include="Wishlist.aspx.cs">
+      <DependentUpon>Wishlist.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Wishlist.aspx.designer.cs">
+      <DependentUpon>Wishlist.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="MyPage.aspx.cs">

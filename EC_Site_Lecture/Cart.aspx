@@ -22,7 +22,6 @@
             gap: 20px; 
         }
 
-
         .navbar a {
             color: white;
             text-decoration: none;
@@ -42,6 +41,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
+
         .cart-item {
             display: flex;
             align-items: center;
@@ -83,6 +83,7 @@
             font-size: 12px;
             color: #888;
         }
+
         .checkout-btn {
             display: inline-block;
             padding: 12px 24px;
@@ -116,7 +117,6 @@
         <a href="/Logout.aspx">ログアウト</a>
     </div>
 
-
     <form id="form1" runat="server">
         <div class="container">
             <h2>ショッピングカート</h2>
@@ -134,6 +134,7 @@
                                 <p><strong>数量:</strong> <%# Eval("Quantity") %></p>
                             </div>
                             <div class="actions">
+                                <!-- Buttons for increase, decrease and delete actions -->
                                 <asp:Button CommandName="Increase" CommandArgument='<%# Eval("ProductId") %>' Text="増加" runat="server" />
                                 <asp:Button CommandName="Decrease" CommandArgument='<%# Eval("ProductId") %>' Text="減少" runat="server" />
                                 <asp:Button CommandName="Delete" CommandArgument='<%# Eval("ProductId") %>' Text="削除" runat="server" />
@@ -145,7 +146,7 @@
                 <div class="total">
                     <strong>合計金額:</strong> ¥<asp:Label ID="lblTotal" runat="server" />
                 </div>
-                <asp:Button ID="ProceedToCheckout" runat="server" Text="購入手続きへ進む" OnClick="ProceedToCheckout_Click" CssClass="btn-proceed" />
+                <asp:Button ID="ProceedToCheckout" runat="server" Text="購入手続きへ進む" OnClick="ProceedToCheckout_Click" CssClass="checkout-btn" />
             </div>
         </div>
     </form>

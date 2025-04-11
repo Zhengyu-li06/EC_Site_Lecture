@@ -50,6 +50,7 @@
             padding: 20px;
             width: 300px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-align: center;  
         }
 
         .product-card:hover {
@@ -82,7 +83,8 @@
             font-size: 16px;
         }
 
-        .add-to-cart-button {
+        .add-to-cart-button,
+        .add-to-wishlist-button {
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
@@ -91,12 +93,20 @@
             cursor: pointer;
             margin-top: 10px;
             transition: background-color 0.3s;
+            font-size: 14px;
         }
 
-        .add-to-cart-button:disabled {
+        .add-to-cart-button:disabled,
+        .add-to-wishlist-button:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        .add-to-wishlist-button {
+            background-color: #FF4081; 
+            margin-top: 10px;
+        }
+
         .search-filter-bar {
             display: flex;
             justify-content: center;
@@ -104,6 +114,21 @@
             gap: 12px;
             margin-bottom: 30px;
             flex-wrap: wrap;
+        }
+        .add-to-wishlist-button {
+            background-color: #FF4081;  
+            margin-top: 10px;
+            font-size: 20px;
+            padding: 10px;
+        }
+
+        .add-to-wishlist-button:enabled {
+            cursor: pointer;
+        }
+
+        .add-to-wishlist-button:disabled {
+            cursor: not-allowed;
+            background-color: #ccc;
         }
 
         .search-box {
@@ -138,6 +163,18 @@
             cursor: pointer;
         }
 
+       
+        .wishlist-icon {
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .wishlist-icon:hover {
+            opacity: 0.8;
+        }
+
     </style>
 </head>
 <body>
@@ -147,7 +184,13 @@
         <a href="/Login.aspx">ログイン</a>
         <a href="/Register.aspx">新規登録</a>
         <a href="/Logout.aspx">ログアウト</a>
+
+       
+        <a href="/Wishlist.aspx" class="wishlist-icon" title="Wishlist">
+            <i class="fa fa-heart"></i> 
+        </a>
     </div>
+
     <form id="form1" runat="server">
         <div class="search-filter-bar">
             <asp:TextBox ID="txtSearch" runat="server" CssClass="search-box" Placeholder="キーワードで検索" />
@@ -160,6 +203,7 @@
                 <asp:ListItem Text="名前順（A→Z）" Value="name_asc" />
             </asp:DropDownList>
         </div>
+
         <div class="main-content">
             <div class="product-container">
                 <asp:Repeater ID="ProductRepeater" runat="server">
@@ -173,6 +217,8 @@
                                 runat="server" 
                                 NavigateUrl='<%# "ProductDetail.aspx?id=" + Eval("Id") %>' 
                                 CssClass="view-details-link">詳細を見る</asp:HyperLink>
+
+                            
                             <asp:Button 
                                 runat="server" 
                                 Text="カートに追加" 
@@ -180,8 +226,18 @@
                                 CommandArgument='<%# Eval("Id") %>' 
                                 OnCommand="AddToCart_Click" 
                                 CssClass="add-to-cart-button" 
-                                Enabled='<%# Session["UserId"] != null %>' />  
-                        </div>
+                                Enabled='<%# Session["UserId"] != null %>' />
+
+                            <asp:Button 
+                                runat="server" 
+                                Text='<%# Convert.ToBoolean(Eval("IsInWishlist")) ? "♥" : "♡" %>' 
+                                CommandName="AddToWishlist" 
+                                CommandArgument='<%# Eval("Id") %>' 
+                                OnCommand="AddToWishlist_Click" 
+                                CssClass="add-to-wishlist-button" 
+                                Enabled='<%# Session["UserId"] != null %>' />
+
+                             </div>
                     </ItemTemplate>
                 </asp:Repeater>
             </div>
@@ -192,5 +248,7 @@
             </div>
         </div>
     </form>
+    
 </body>
+
 </html>

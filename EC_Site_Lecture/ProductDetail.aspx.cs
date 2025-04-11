@@ -23,7 +23,7 @@ namespace YourNamespace
 
         private void LoadProduct(string id)
         {
-            string connectionString = "Server=DESKTOP-889CVKI;Database=EC_Site_Lecture;Integrated Security=True;";
+            string connectionString = "Server=DESKTOP-8QK0QLL;Database=EC_Site_Lecture;Integrated Security=True;";
             
             string query = "SELECT ProductName, Price, Description, ImageUrl FROM Products WHERE ProductId = @Id";
 

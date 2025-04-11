@@ -24,26 +24,37 @@ namespace YourNamespace
         {
             if (!IsPostBack)
             {
-                if (Session["Cart"] != null)
+                // 确保用户已登录
+                if (Session["UserId"] != null)
                 {
-                    BindCart();
+                    BindCart();  // 绑定购物车内容
                 }
                 else
                 {
-                    Response.Redirect("Index.aspx");
+                    Response.Redirect("Login.aspx");  // 如果未登录，重定向到登录页
                 }
             }
         }
 
-        private void BindCart()
+        protected void BindCart()
         {
-            List<int> cart = Session["Cart"] as List<int> ?? new List<int>();
-            var cartItems = GetCartItems(cart);
-            CartRepeater.DataSource = cartItems;
+            int userId = Convert.ToInt32(Session["UserId"]);  // 从 Session 获取用户 ID
+            var cartItems = GetCartItemsFromDatabase(userId);  // 从数据库读取购物车商品
+            CartRepeater.DataSource = cartItems;  // 绑定数据源到 Repeater 控件
             CartRepeater.DataBind();
+
+            // 计算总金额并显示在 lblTotal 控件中
+            double totalAmount = cartItems.Sum(item => item.Price * item.Quantity);  // 计算总金额
+            lblTotal.Text = totalAmount.ToString("N0");  // 显示金额（格式化为千位分隔符）
+
+            // 将购物车数据和合计金额存入 Session
+            Session["CartItems"] = cartItems;      // 存储购物车商品数据
+            Session["TotalAmount"] = totalAmount;  // 存储合计金额
         }
 
-        private List<CartItem> GetCartItems(List<int> productIds)
+
+
+        private List<CartItem> GetCartItemsFromDatabase(int userId)
         {
             var items = new List<CartItem>();
             string connStr = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
@@ -51,27 +62,28 @@ namespace YourNamespace
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-                foreach (int id in productIds.Distinct())
-                {
-                    string sql = "SELECT ProductId, ProductName, Price, Description, ImageUrl FROM Products WHERE ProductId = @id";
-                    SqlCommand cmd = new SqlCommand(sql, conn);
-                    cmd.Parameters.AddWithValue("@id", id);
+                string sql = @"
+                    SELECT c.ProductId, p.ProductName, p.Price, p.Description, p.ImageUrl, c.Quantity
+                    FROM Cart c
+                    JOIN Products p ON c.ProductId = p.ProductId
+                    WHERE c.UserId = @UserId";
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@UserId", userId);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
                     {
-                        if (reader.Read())
+                        items.Add(new CartItem
                         {
-                            int count = productIds.Count(pid => pid == id);
-                            items.Add(new CartItem
-                            {
-                                ProductId = id,
-                                Name = reader["ProductName"].ToString(),
-                                Price = double.TryParse(reader["Price"].ToString(), out var price) ? price : 0,
-                                Description = reader["Description"].ToString(),
-                                ImageUrl = reader["ImageUrl"].ToString(),
-                                Quantity = count
-                            });
-                        }
+                            ProductId = Convert.ToInt32(reader["ProductId"]),
+                            Name = reader["ProductName"].ToString(),
+                            Price = Convert.ToDouble(reader["Price"]),
+                            Description = reader["Description"].ToString(),
+                            ImageUrl = reader["ImageUrl"].ToString(),
+                            Quantity = Convert.ToInt32(reader["Quantity"])
+                        });
                     }
                 }
             }
@@ -79,31 +91,49 @@ namespace YourNamespace
             return items;
         }
 
+        // 处理购物车操作（增加、减少、删除）
         protected void CartRepeater_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             int productId = int.Parse(e.CommandArgument.ToString());
-            List<int> cart = Session["Cart"] as List<int> ?? new List<int>();
+            int userId = Convert.ToInt32(Session["UserId"]);
+            string connStr = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
 
-            if (e.CommandName == "Increase")
+            using (SqlConnection conn = new SqlConnection(connStr))
             {
-                cart.Add(productId);
-            }
-            else if (e.CommandName == "Decrease")
-            {
-                if (cart.Contains(productId))
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+
+                if (e.CommandName == "Increase")
                 {
-                    cart.Remove(productId);
+                    // 增加商品数量
+                    cmd.CommandText = @"
+                        UPDATE Cart SET Quantity = Quantity + 1 
+                        WHERE UserId = @UserId AND ProductId = @ProductId";
                 }
-            }
-            else if (e.CommandName == "Delete")
-            {
-                cart.RemoveAll(id => id == productId);
+                else if (e.CommandName == "Decrease")
+                {
+                    // 减少商品数量，确保最少为 1
+                    cmd.CommandText = @"
+                        UPDATE Cart SET Quantity = Quantity - 1 
+                        WHERE UserId = @UserId AND ProductId = @ProductId AND Quantity > 1";
+                }
+                else if (e.CommandName == "Delete")
+                {
+                    // 删除商品
+                    cmd.CommandText = @"
+                        DELETE FROM Cart WHERE UserId = @UserId AND ProductId = @ProductId";
+                }
+
+                cmd.Parameters.AddWithValue("@UserId", userId);
+                cmd.Parameters.AddWithValue("@ProductId", productId);
+                cmd.ExecuteNonQuery();
             }
 
-            Session["Cart"] = cart;
-            BindCart();
+            BindCart();  // 重新绑定购物车
         }
 
+        // 跳转到结算页面
         protected void ProceedToCheckout_Click(object sender, EventArgs e)
         {
             Response.Redirect("Checkout.aspx");

@@ -3,46 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data.SqlClient;
 using System.Web.UI;
-using static YourNamespace.Index;
 using System.Configuration;
+using static YourNamespace.Cart;
+using System.Net.Mail;
+using System.Net;
 
 namespace YourNamespace
 {
     public partial class Checkout : Page
     {
+        public class Product
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public double Price { get; set; }
+            public int Quantity { get; set; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Ensure cart is available and not empty
-            if (Session["Cart"] != null && ((List<int>)Session["Cart"]).Count > 0)
+            if (!IsPostBack)
             {
-                List<int> cart = (List<int>)Session["Cart"];
-                var cartProducts = GetCartProducts(cart);
+                if (Session["CartItems"] != null && Session["TotalAmount"] != null)
+                {
+                    var cartItems = (List<CartItem>)Session["CartItems"];
+                    double totalAmount = (double)Session["TotalAmount"];
 
-                // Bind the cart items to the Repeater
-                CartRepeater.DataSource = cartProducts;
-                CartRepeater.DataBind();
-
-                // Calculate and display the total price (consider quantity)
-                double total = cartProducts.Sum(p => p.Price * p.Quantity);
-                lblTotal.Text = total.ToString("F2");
-            }
-            else
-            {
-                // If no cart items are available, redirect to the product list
-                Response.Redirect("Index.aspx");
+                    
+                    CartRepeater.DataSource = cartItems;
+                    CartRepeater.DataBind();
+                    lblTotal.Text = totalAmount.ToString("F2");
+                }
+                else
+                {
+                    Response.Redirect("Index.aspx");
+                }
             }
         }
 
-        private List<Product> GetCartProducts(List<int> cartProductIds)
+
+        private List<Product> GetCartProducts()
         {
             var cartProducts = new List<Product>();
+
+            var cartItems = (List<CartItem>)Session["CartItems"];
             string connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
 
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                string productIds = string.Join(",", cartProductIds);
+                // 使用逗号分隔的 ProductId 列表
+                string productIds = string.Join(",", cartItems.Select(item => item.ProductId));
                 string sql = $"SELECT ProductId, ProductName, Price FROM Products WHERE ProductId IN ({productIds})";
 
                 var command = new SqlCommand(sql, connection);
@@ -50,14 +62,17 @@ namespace YourNamespace
 
                 while (reader.Read())
                 {
-                    // Get the quantity of each product in the cart (count occurrences)
-                    int quantity = cartProductIds.Count(id => id == Convert.ToInt32(reader["ProductId"]));
+                    int productId = Convert.ToInt32(reader["ProductId"]);
+                    string productName = reader["ProductName"].ToString();
+                    double price = Convert.ToDouble(reader["Price"]);
 
+                    
+                    int quantity = cartItems.First(item => item.ProductId == productId).Quantity;
                     cartProducts.Add(new Product
                     {
-                        Id = Convert.ToInt32(reader["ProductId"]),
-                        Name = reader["ProductName"].ToString(),
-                        Price = Convert.ToDouble(reader["Price"]),
+                        Id = productId,
+                        Name = productName,
+                        Price = price,
                         Quantity = quantity
                     });
                 }
@@ -68,47 +83,110 @@ namespace YourNamespace
             return cartProducts;
         }
 
+       
         protected void ConfirmPurchase_Click(object sender, EventArgs e)
         {
-            // Ensure that cart is not null and contains items
-            if (Session["Cart"] == null || ((List<int>)Session["Cart"]).Count == 0)
+            
+            if (Session["CartItems"] == null || ((List<CartItem>)Session["CartItems"]).Count == 0)
             {
                 Response.Redirect("Index.aspx");
                 return;
             }
 
-            // Customer delivery information from the form
             string customerName = txtName.Text;
             string customerAddress = txtAddress.Text;
             string customerPhone = txtPhone.Text;
-            string customerEmail = txtEmail.Text;
 
-            // Retrieve cart products
-            List<int> cartProductIds = (List<int>)Session["Cart"];
-            var cartProducts = GetCartProducts(cartProductIds);
 
-            // Calculate total price (consider quantity)
+            int userId = Session["UserId"] != null ? Convert.ToInt32(Session["UserId"]) : 1;
+            string customerEmail = GetUserEmail(userId);
+
+
+
+            var cartProducts = GetCartProducts();
+
+            
             double totalAmount = cartProducts.Sum(p => p.Price * p.Quantity);
 
-            // Insert the order into the Orders table
             int orderId = InsertOrder(customerName, customerAddress, customerPhone, customerEmail, totalAmount);
 
-            // Insert each cart item into the OrderItems table (consider quantity)
+           
             InsertOrderItems(orderId, cartProducts);
 
-            // Clear the cart after purchase
-            Session["Cart"] = null;
+           
+            Session["CartItems"] = null;
 
-            // Check if the user is logged in (assuming there is a "User" session variable)
+            SendConfirmationEmail(customerEmail, cartProducts, totalAmount);
+
             if (Session["UserId"] != null)
             {
-                // Redirect to the Thank You page if logged in
                 Response.Redirect("ThankYou.aspx");
             }
             else
             {
-                // Optionally, show a message or redirect to login page if not logged in
                 Response.Redirect("Login.aspx");
+            }
+        }
+        private string GetUserEmail(int userId)
+        {
+            string email = "";
+
+            string connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string sql = "SELECT Email FROM Users WHERE UserId = @UserId";
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    var result = command.ExecuteScalar();
+                    if (result != null)
+                    {
+                        email = result.ToString();
+                    }
+                }
+            }
+
+            return email;
+        }
+
+        private void SendConfirmationEmail(string toEmail, List<Product> products, double totalAmount)
+        {
+            try
+            {
+                string subject = "【ECサイト】ご注文確認メール";
+                string body = $"お客様\n\nこのたびはご注文ありがとうございます。\n\n注文内容は以下の通りです：\n\n";
+
+                foreach (var product in products)
+                {
+                    body += $"- {product.Name} x {product.Quantity}：¥{product.Price * product.Quantity:F2}\n";
+                }
+
+                body += $"\n合計金額：¥{totalAmount:F2}\n\nまたのご利用をお待ちしております。\n";
+                MailMessage mail = new MailMessage
+                {
+                    From = new MailAddress("zezeyoyo506@gmail.com", "ECサイト"), 
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = false 
+                };
+
+                mail.To.Add(toEmail); 
+
+               
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    Credentials = new NetworkCredential("zezeyoyo506@gmail.com", "vdac wvbf rdxz mgut"), 
+                    EnableSsl = true
+                };
+
+                smtp.Send(mail);
+            }
+            catch (Exception ex)
+            {
+               
+                System.Diagnostics.Debug.WriteLine("error: " + ex.Message);
             }
         }
 
@@ -122,11 +200,11 @@ namespace YourNamespace
                 connection.Open();
 
                 string sql = @"INSERT INTO Orders (UserId, TotalAmount, CustomerName, CustomerAddress, CustomerPhone, CustomerEmail, OrderDate, Status)
-                               VALUES (@UserId, @TotalAmount, @CustomerName, @CustomerAddress, @CustomerPhone, @CustomerEmail, @OrderDate, @Status);
-                               SELECT SCOPE_IDENTITY();"; // Returns the generated OrderId
+                       VALUES (@UserId, @TotalAmount, @CustomerName, @CustomerAddress, @CustomerPhone, @CustomerEmail, @OrderDate, @Status);
+                       SELECT SCOPE_IDENTITY();"; 
 
                 var command = new SqlCommand(sql, connection);
-                command.Parameters.AddWithValue("@UserId", Session["UserId"] ?? 1); // Get UserId from session (or use 1 as default)
+                command.Parameters.AddWithValue("@UserId", Session["UserId"] ?? 1); 
                 command.Parameters.AddWithValue("@TotalAmount", totalAmount);
                 command.Parameters.AddWithValue("@CustomerName", customerName);
                 command.Parameters.AddWithValue("@CustomerAddress", customerAddress);
@@ -135,12 +213,13 @@ namespace YourNamespace
                 command.Parameters.AddWithValue("@OrderDate", DateTime.Now);
                 command.Parameters.AddWithValue("@Status", "Pending");
 
-                orderId = Convert.ToInt32(command.ExecuteScalar()); // Get the generated OrderId
+                orderId = Convert.ToInt32(command.ExecuteScalar()); 
             }
 
             return orderId;
         }
 
+        
         private void InsertOrderItems(int orderId, List<Product> cartProducts)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
@@ -152,18 +231,19 @@ namespace YourNamespace
                 foreach (var product in cartProducts)
                 {
                     string sql = @"INSERT INTO OrderItems (OrderId, ProductId, ProductName, ProductPrice, Quantity)
-                                   VALUES (@OrderId, @ProductId, @ProductName, @ProductPrice, @Quantity)";
+                           VALUES (@OrderId, @ProductId, @ProductName, @ProductPrice, @Quantity)";
 
                     var command = new SqlCommand(sql, connection);
                     command.Parameters.AddWithValue("@OrderId", orderId);
                     command.Parameters.AddWithValue("@ProductId", product.Id);
                     command.Parameters.AddWithValue("@ProductName", product.Name);
                     command.Parameters.AddWithValue("@ProductPrice", product.Price);
-                    command.Parameters.AddWithValue("@Quantity", product.Quantity); // Use actual quantity from cart
+                    command.Parameters.AddWithValue("@Quantity", product.Quantity); 
 
                     command.ExecuteNonQuery();
                 }
             }
         }
+
     }
 }
