@@ -15,29 +15,29 @@ namespace EC_Site_Lecture.Controllers
             _connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
         }
 
-        public User GetUserById(int userId)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                string query = "SELECT Username, Email, DateCreated FROM Users WHERE UserId = @UserId";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@UserId", userId);
+        //public User GetUserById(int userId)
+        //{
+        //    using (SqlConnection connection = new SqlConnection(_connectionString))
+        //    {
+        //        connection.Open();
+        //        string query = "SELECT Username, Email, DateCreated FROM Users WHERE UserId = @UserId";
+        //        SqlCommand command = new SqlCommand(query, connection);
+        //        command.Parameters.AddWithValue("@UserId", userId);
 
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
-                {
-                    return new User
-                    {
-                        Username = reader["Username"].ToString(),
-                        Email = reader["Email"].ToString(),
-                        DateCreated = Convert.ToDateTime(reader["DateCreated"])
-                    };
-                }
-            }
+        //        SqlDataReader reader = command.ExecuteReader();
+        //        if (reader.Read())
+        //        {
+        //            return new User
+        //            {
+        //                Username = reader["Username"].ToString(),
+        //                Email = reader["Email"].ToString(),
+        //                DateCreated = Convert.ToDateTime(reader["DateCreated"])
+        //            };
+        //        }
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
         public void UpdateUsername(int userId, string newUsername)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))

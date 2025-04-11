@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="YourNamespace.Login" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -86,27 +86,29 @@
     </style>
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form method="post" action="/Account/Login">
         <h2>ログイン</h2>
 
         <div class="form-group">
-            <label for="txtUsernameOrEmail">ユーザー名またはメール</label>
-            <asp:TextBox ID="txtUsernameOrEmail" runat="server" CssClass="form-control" />
+            <label for="UsernameOrEmail">ユーザー名またはメール</label>
+            <input type="text" id="UsernameOrEmail" name="UsernameOrEmail" class="form-control" required />
         </div>
 
         <div class="form-group">
-            <label for="txtPassword">パスワード</label>
-            <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" />
+            <label for="Password">パスワード</label>
+            <input type="password" id="Password" name="Password" class="form-control" required />
         </div>
 
         <div class="form-check">
-            <asp:CheckBox ID="chkRememberMe" runat="server" />
-            <label for="chkRememberMe">ログイン状態を保持する</label>
+            <input type="checkbox" id="RememberMe" name="RememberMe" />
+            <label for="RememberMe">ログイン状態を保持する</label>
         </div>
 
-        <asp:Button ID="btnLogin" runat="server" Text="ログイン" CssClass="btn" OnClick="btnLogin_Click" />
+        <button type="submit" class="btn">ログイン</button>
 
-        <asp:Label ID="lblErrorMessage" runat="server" />
+        <% if (!string.IsNullOrEmpty(Request["error"])) { %>
+            <div id="lblErrorMessage">ユーザー名またはパスワードが間違っています。</div>
+        <% } %>
     </form>
 </body>
 </html>

@@ -11,51 +11,51 @@ namespace YourNamespace
     {
         private MyPageController _controller = new MyPageController();
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            if (!IsPostBack)
-            {
-                if (Session["UserId"] == null)
-                {
-                    Response.Redirect("Login.aspx");
-                    return;
-                }
+        //protected void Page_Load(object sender, EventArgs e)
+        //{
+        //    if (!IsPostBack)
+        //    {
+        //        if (Session["UserId"] == null)
+        //        {
+        //            Response.Redirect("Login.aspx");
+        //            return;
+        //        }
 
-                int userId = (int)Session["UserId"];
-                FillUserInfo(userId);
-                LoadOrders(userId);
-            }
-        }
+        //        int userId = (int)Session["UserId"];
+        //        FillUserInfo(userId);
+        //        LoadOrders(userId);
+        //    }
+        //}
 
-        private void FillUserInfo(int userId)
-        {
-            var user = _controller.GetUserById(userId);
-            if (user != null)
-            {
-                lblUsername.Text = user.Username;
-                lblEmail.Text = user.Email;
-                lblDateCreated.Text = user.DateCreated.ToString("yyyy/MM/dd");
+        //private void FillUserInfo(int userId)
+        //{
+        //    var user = _controller.GetUserById(userId);
+        //    if (user != null)
+        //    {
+        //        lblUsername.Text = user.Username;
+        //        lblEmail.Text = user.Email;
+        //        lblDateCreated.Text = user.DateCreated.ToString("yyyy/MM/dd");
 
                
-                txtUsername.Text = user.Username;
-                txtEmail.Text = user.Email;
-            }
-        }
+        //        txtUsername.Text = user.Username;
+        //        txtEmail.Text = user.Email;
+        //    }
+        //}
 
-        protected void btnUpdateUser_Click(object sender, EventArgs e)
-        {
-            if (Session["UserId"] != null)
-            {
-                int userId = (int)Session["UserId"];
-                string newUsername = txtUsername.Text.Trim();
+        //protected void btnUpdateUser_Click(object sender, EventArgs e)
+        //{
+        //    if (Session["UserId"] != null)
+        //    {
+        //        int userId = (int)Session["UserId"];
+        //        string newUsername = txtUsername.Text.Trim();
 
-                if (!string.IsNullOrEmpty(newUsername))
-                {
-                    _controller.UpdateUsername(userId, newUsername);
-                    FillUserInfo(userId);
-                }
-            }
-        }
+        //        if (!string.IsNullOrEmpty(newUsername))
+        //        {
+        //            _controller.UpdateUsername(userId, newUsername);
+        //            FillUserInfo(userId);
+        //        }
+        //    }
+        //}
 
         protected void btnDeleteAccount_Click(object sender, EventArgs e)
         {
