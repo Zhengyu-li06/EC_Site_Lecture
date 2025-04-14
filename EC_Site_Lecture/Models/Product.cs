@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using YourNamespace.ScreenDTO;
+using EC_Site_Lecture.ScreenDTO;
 
-namespace YourNamespace.Models
+namespace EC_Site_Lecture.Models
 {
     public class Product
     {

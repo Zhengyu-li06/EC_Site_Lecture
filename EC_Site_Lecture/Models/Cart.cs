@@ -1,6 +1,13 @@
-﻿namespace YourNamespace.Models
+﻿
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using EC_Site_Lecture.ScreenDTO;
+
+namespace EC_Site_Lecture.Models
 {
-    using YourNamespace.DTO;
+    using EC_Site_Lecture.DTO;
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
@@ -10,7 +17,7 @@
     {
         private readonly string connStr = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
 
-        // 获取购物车商品列表
+       
         public List<CartDto> GetCartItems(int userId)
         {
             var items = new List<CartDto>();
@@ -47,7 +54,7 @@
             return items;
         }
 
-        // 增加、减少、删除商品数量
+      
         public void UpdateQuantity(int userId, int productId, string action)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -75,14 +82,11 @@
             }
         }
 
-        // 将商品加入购物车（不存在则插入，存在则数量 +1）
         public void AddToCart(int userId, int productId)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-
-                // 检查商品是否已在购物车中
                 string checkQuery = "SELECT COUNT(*) FROM Cart WHERE UserId = @UserId AND ProductId = @ProductId";
                 using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
                 {
@@ -92,7 +96,6 @@
                     int count = (int)checkCmd.ExecuteScalar();
                     if (count == 0)
                     {
-                        // 商品不存在，插入新记录
                         string insertQuery = "INSERT INTO Cart (UserId, ProductId, Quantity) VALUES (@UserId, @ProductId, @Quantity)";
                         using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
                         {
@@ -104,7 +107,6 @@
                     }
                     else
                     {
-                        // 商品已存在，更新数量
                         string updateQuery = "UPDATE Cart SET Quantity = Quantity + 1 WHERE UserId = @UserId AND ProductId = @ProductId";
                         using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                         {
@@ -117,8 +119,7 @@
             }
         }
 
-        
-        // 获取购物车中所有商品的数量（总计）
+     
         public int GetCartItemCount(int userId)
         {
             int itemCount = 0;
@@ -137,7 +138,7 @@
             return itemCount;
         }
 
-        // 获取指定商品的购物车数量
+      
         public int GetCartItemCount(int userId, int productId)
         {
             int itemCount = 0;

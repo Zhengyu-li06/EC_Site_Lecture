@@ -180,7 +180,7 @@
 <body>
     <div class="navbar">
         <a href="/Index.aspx">商品一覧</a>
-        <a href="/MyPage.aspx">マイページ</a>
+        <a href="/Views/MyPage.aspx?userId=<%= Session["UserId"] %>">マイページ</a>
         <a href="/Login.aspx">ログイン</a>
         <a href="/Register.aspx">新規登録</a>
         <a href="/Logout.aspx">ログアウト</a>
@@ -210,7 +210,7 @@
                 var sortOption = Request["sortOption"] ?? "order";
                 int userId = Session["UserId"] != null ? (int)Session["UserId"] : 0;
 
-                var products = YourNamespace.Models.Product.GetAll(keyword, sortOption, userId);
+                var products = EC_Site_Lecture.Models.Product.GetAll(keyword, sortOption, userId);
                 foreach (var item in products)
                 {
             %>
@@ -237,7 +237,7 @@
         </div>
 
         <div class="cart-summary">
-            <a href="/Cart.aspx">カート (<%= new YourNamespace.Models.CartModel().GetCartItemCount(userId) %>)</a>
+            <a href="/Views/Cart.aspx">カート (<%= new EC_Site_Lecture.Models.CartModel().GetCartItemCount(userId) %>)</a>
         </div>
     </div>
 </body>

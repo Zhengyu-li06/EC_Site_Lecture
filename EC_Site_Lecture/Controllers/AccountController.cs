@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using YourNamespace.DTO;
-using YourNamespace.Models;
-using YourNamespace.ScreenDTO;
+using EC_Site_Lecture.DTO;
+using EC_Site_Lecture.Models;
+using EC_Site_Lecture.ScreenDTO;
 
-namespace YourNamespace.Controllers
+namespace EC_Site_Lecture.Controllers
 {
     public class AccountController : Controller
     {
@@ -20,7 +20,7 @@ namespace YourNamespace.Controllers
                 return Redirect("/Login.aspx?error=1");
             }
 
-            var user = YourNamespace.Models.User.GetByUsernameOrEmail(model.UsernameOrEmail);
+            var user = EC_Site_Lecture.Models.User.GetByUsernameOrEmail(model.UsernameOrEmail);
             if (user != null && user.VerifyPassword(model.Password))
             {
                 Session["UserId"] = user.UserId;

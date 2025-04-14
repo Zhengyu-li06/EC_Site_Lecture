@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using YourNamespace.DTO;
-using YourNamespace.ScreenDTO;
+using EC_Site_Lecture.DTO;
+using EC_Site_Lecture.ScreenDTO;
 
 public class WishlistModel
 {

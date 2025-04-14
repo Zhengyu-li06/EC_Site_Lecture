@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace YourNamespace.DTO
+namespace EC_Site_Lecture.DTO
 {
     public class CartDto
     {

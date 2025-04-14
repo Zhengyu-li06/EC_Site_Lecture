@@ -1,98 +1,70 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
+using System.Web.Mvc;
 using EC_Site_Lecture.Models;
 
 namespace EC_Site_Lecture.Controllers
 {
-    public class MyPageController
+    public class MyPageController : Controller
     {
-        private readonly string _connectionString;
+        private readonly MyPageModel _model;
 
         public MyPageController()
         {
-            _connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
+            _model = new MyPageModel();
         }
 
-        //public User GetUserById(int userId)
-        //{
-        //    using (SqlConnection connection = new SqlConnection(_connectionString))
-        //    {
-        //        connection.Open();
-        //        string query = "SELECT Username, Email, DateCreated FROM Users WHERE UserId = @UserId";
-        //        SqlCommand command = new SqlCommand(query, connection);
-        //        command.Parameters.AddWithValue("@UserId", userId);
-
-        //        SqlDataReader reader = command.ExecuteReader();
-        //        if (reader.Read())
-        //        {
-        //            return new User
-        //            {
-        //                Username = reader["Username"].ToString(),
-        //                Email = reader["Email"].ToString(),
-        //                DateCreated = Convert.ToDateTime(reader["DateCreated"])
-        //            };
-        //        }
-        //    }
-
-        //    return null;
-        //}
-        public void UpdateUsername(int userId, string newUsername)
+        // 显示用户信息和订单
+        public ActionResult Index()
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            if (Session["UserId"] == null)
             {
-                connection.Open();
-                string query = "UPDATE Users SET Username = @Username WHERE UserId = @UserId";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Username", newUsername);
-                command.Parameters.AddWithValue("@UserId", userId);
-                command.ExecuteNonQuery();
+                return RedirectToAction("Login", "Account");
             }
+
+            int userId = (int)Session["UserId"];
+            var user = _model.GetUserById(userId);
+            var orders = _model.GetOrdersByUserId(userId);
+
+            // 保存用户数据和订单数据到 Session
+            Session["UserData"] = user;
+            Session["Orders"] = orders;
+
+            return View();  // 返回视图
         }
 
-        public void DeleteUser(int userId)
+        // 更新用户名
+        [HttpPost]
+        public ActionResult UpdateUsername(string newUsername)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            if (Session["UserId"] != null)
             {
-                connection.Open();
-                string query = "DELETE FROM Users WHERE UserId = @UserId";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@UserId", userId);
-                command.ExecuteNonQuery();
+                int userId = (int)Session["UserId"];
+                _model.UpdateUsername(userId, newUsername);
             }
+
+            return RedirectToAction("Index");
         }
 
-        public List<Order> GetOrdersByUserId(int userId)
+        // 删除用户
+        [HttpPost]
+        public ActionResult DeleteUser()
         {
-            List<Order> orders = new List<Order>();
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            if (Session["UserId"] != null)
             {
-                connection.Open();
-                string query = "SELECT OrderId, TotalAmount, CustomerName, CustomerAddress, CustomerPhone, CustomerEmail, OrderDate, Status FROM Orders WHERE UserId = @UserId";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@UserId", userId);
+                int userId = (int)Session["UserId"];
+                _model.DeleteUser(userId);
 
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    orders.Add(new Order
-                    {
-                        OrderId = Convert.ToInt32(reader["OrderId"]),
-                        TotalAmount = Convert.ToDecimal(reader["TotalAmount"]),
-                        CustomerName = reader["CustomerName"].ToString(),
-                        CustomerAddress = reader["CustomerAddress"].ToString(),
-                        CustomerPhone = reader["CustomerPhone"].ToString(),
-                        CustomerEmail = reader["CustomerEmail"].ToString(),
-                        OrderDate = Convert.ToDateTime(reader["OrderDate"]),
-                        Status = reader["Status"].ToString()
-                    });
-                }
+                Session.Abandon();
             }
 
-            return orders;
+            return RedirectToAction("Login", "Account");
+        }
+
+        // 注销用户
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            return RedirectToAction("Login", "Account");
         }
     }
 }

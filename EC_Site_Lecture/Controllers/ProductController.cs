@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using YourNamespace.DTO;
-using YourNamespace.Models;
-using YourNamespace.ScreenDTO;
+using EC_Site_Lecture.DTO;
+using EC_Site_Lecture.Models;
+using EC_Site_Lecture.ScreenDTO;
 
-namespace YourNamespace.Controllers
+namespace EC_Site_Lecture.Controllers
 {
    
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace YourNamespace.ScreenDTO
+namespace EC_Site_Lecture.ScreenDTO
 {
     public class LoginDTO
     {

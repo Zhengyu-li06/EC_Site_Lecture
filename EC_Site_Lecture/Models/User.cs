@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace YourNamespace.Models
+namespace EC_Site_Lecture.Models
 {
     public class User
     {

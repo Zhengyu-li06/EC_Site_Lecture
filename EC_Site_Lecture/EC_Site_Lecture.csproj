@@ -118,16 +118,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
-    <Content Include="Cart.aspx" />
-    <Content Include="Checkout.aspx" />
+    <Content Include="Views\Cart.aspx" />
+    <Content Include="Views\Checkout.aspx" />
+    <Content Include="Views\MyPage.aspx" />
+    <Content Include="Views\Register.aspx" />
     <Content Include="Views\Index.aspx" />
     <Content Include="Views\Login.aspx" />
+    <Content Include="Views\ThankYou.aspx" />
     <Content Include="Wishlist.aspx" />
-    <Content Include="MyPage.aspx" />
-    <Content Include="ThankYou.aspx" />
     <Content Include="ProductDetail.aspx" />
     <Content Include="Logout.aspx" />
-    <Content Include="Register.aspx" />
     <Content Include="Index00.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -224,29 +224,23 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\RouteConfig2.cs" />
-    <Compile Include="Cart.aspx.cs">
-      <DependentUpon>Cart.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Cart.aspx.designer.cs">
-      <DependentUpon>Cart.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Checkout.aspx.cs">
-      <DependentUpon>Checkout.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Checkout.aspx.designer.cs">
-      <DependentUpon>Checkout.aspx</DependentUpon>
-    </Compile>
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\MyPageController.cs" />
+    <Compile Include="DTO\OrderItemDTO.cs" />
+    <Compile Include="DTO\OrderDTO.cs" />
+    <Compile Include="DTO\RegisterDTO.cs" />
     <Compile Include="DTO\WishlistDTO.cs" />
     <Compile Include="DTO\CartDTO.cs" />
     <Compile Include="DTO\ProductDTO.cs" />
     <Compile Include="DTO\LoginDTO.cs" />
+    <Compile Include="Models\ThankYou.cs" />
+    <Compile Include="Models\MyPage.cs" />
+    <Compile Include="Models\UserRegist.cs" />
     <Compile Include="Models\Wishlist.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Product.cs" />
@@ -259,20 +253,6 @@
     </Compile>
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Order.cs" />
-    <Compile Include="MyPage.aspx.cs">
-      <DependentUpon>MyPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MyPage.aspx.designer.cs">
-      <DependentUpon>MyPage.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ThankYou.aspx.cs">
-      <DependentUpon>ThankYou.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ThankYou.aspx.designer.cs">
-      <DependentUpon>ThankYou.aspx</DependentUpon>
-    </Compile>
     <Compile Include="ProductDetail.aspx.cs">
       <DependentUpon>ProductDetail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -286,13 +266,6 @@
     </Compile>
     <Compile Include="Logout.aspx.designer.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Register.aspx.cs">
-      <DependentUpon>Register.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Register.aspx.designer.cs">
-      <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
     <Compile Include="Index00.aspx.cs">
       <DependentUpon>Index00.aspx</DependentUpon>
