@@ -179,12 +179,12 @@
 </head>
 <body>
     <div class="navbar">
-        <a href="/Index.aspx">商品一覧</a>
+        <a href="/Views/Index.aspx">商品一覧</a>
         <a href="/Views/MyPage.aspx?userId=<%= Session["UserId"] %>">マイページ</a>
-        <a href="/Login.aspx">ログイン</a>
-        <a href="/Register.aspx">新規登録</a>
-        <a href="/Logout.aspx">ログアウト</a>
-        <a href="/Wishlist.aspx" class="wishlist-icon"><i class="fa fa-heart"></i></a>
+        <a href="/Views/Login.aspx">ログイン</a>
+        <a href="/Views/Register.aspx">新規登録</a>
+        <a href="/Views/Logout.aspx">ログアウト</a>
+        <a href="/Views/Wishlist.aspx" class="wishlist-icon"><i class="fa fa-heart"></i></a>
     </div>
 
     <!-- 検索フォーム -->
@@ -210,7 +210,7 @@
                 var sortOption = Request["sortOption"] ?? "order";
                 int userId = Session["UserId"] != null ? (int)Session["UserId"] : 0;
 
-                var products = EC_Site_Lecture.Models.Product.GetAll(keyword, sortOption, userId);
+                var products = EC_Site_Lecture.Models.Product1.GetAll(keyword, sortOption, userId);
                 foreach (var item in products)
                 {
             %>
@@ -219,7 +219,9 @@
                     <p><strong>価格:</strong> ¥<%= item.Price %></p>
                     <p><%= item.Description %></p>
                     <img src="<%= item.ImageUrl %>" alt="商品画像" style="max-width:100%;" />
-                    <a href="/ProductDetail.aspx?id=<%= item.Id %>">詳細を見る</a>
+                   <a href="/Views/ProductDetails.aspx?id=<%= item.Id %>">詳細を見る</a>
+
+
 
                    <form method="post" action="/Product/AddToCart?keyword=<%= keyword %>&sortOption=<%= sortOption %>">
                         <input type="hidden" name="productId" value="<%= item.Id %>" />

@@ -31,6 +31,9 @@ public class WishlistController : Controller
         }
 
         var wishlistItems = _wishlistModel.GetWishlistByUserId(userId);
-        return View(wishlistItems);
+
+        Session["WishlistItems"] = wishlistItems; 
+        return Redirect("~/Views/Wishlist.aspx"); 
     }
+
 }

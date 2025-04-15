@@ -18,7 +18,7 @@ namespace EC_Site_Lecture.Controllers
             {
                 int userId = Session["UserId"] != null ? (int)Session["UserId"] : 0;
 
-                List<ProductDto> products = Product.GetAll(keyword, sortOption, userId);
+                List<ProductDto> products = Product1.GetAll(keyword, sortOption, userId);
 
                 var cartModel = new CartModel();
                 ViewBag.CartCount = cartModel.GetCartItemCount(userId);
@@ -71,6 +71,27 @@ namespace EC_Site_Lecture.Controllers
             return RedirectToAction("Index", new { keyword, sortOption });
         }
 
+        public ActionResult Detail(int id)
+        {
+            var product = Product1.GetById(id);
+
+            if (product == null)
+            {
+                product = new ProductDto
+                {
+                    Name = "商品が見つかりませんでした。",
+                    Price = 0,
+                    Description = "",
+                    ImageUrl = "",
+                    CartQuantity = 0,
+                    IsInWishlist = false
+                };
+            }
+
+            Session["ProductDetail"] = product;
+
+            return Redirect("~/Views/ProductDetail.aspx");
+        }
 
 
     }

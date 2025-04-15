@@ -39,26 +39,26 @@ namespace EC_Site_Lecture.Models
             }
         }
 
-        // 注册方法
+        
         public string Register(RegisterDTO dto, out bool isSuccess)
         {
             isSuccess = false;
 
             if (dto.Password != dto.ConfirmPassword)
             {
-                return "パスワードが一致しません。"; // 密码不一致
+                return "パスワードが一致しません。"; 
             }
 
             if (UserExists(dto.Username, dto.Email))
             {
-                return "ユーザー名またはメールアドレスは既に使用されています。"; // 用户名或邮箱已存在
+                return "ユーザー名またはメールアドレスは既に使用されています。"; 
             }
 
             string passwordHash = HashPassword(dto.Password);
             InsertUser(dto.Username, dto.Email, passwordHash);
 
             isSuccess = true;
-            return "登録が成功しました。"; // 注册成功
+            return "登録が成功しました。"; 
         }
 
         private string HashPassword(string password)

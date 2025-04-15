@@ -50,8 +50,22 @@ namespace EC_Site_Lecture.Controllers
         }
 
 
-        
 
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            Session.Abandon();
+            FormsAuthentication.SignOut();
+
+            if (Request.Cookies[".ASPXAUTH"] != null)
+            {
+                var cookie = new HttpCookie(".ASPXAUTH");
+                cookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(cookie);
+            }
+
+           return Redirect("~/Views/Login.aspx");
+        }
 
     }
 

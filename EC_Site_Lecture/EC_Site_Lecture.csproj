@@ -120,15 +120,14 @@
     <Content Include="About.aspx" />
     <Content Include="Views\Cart.aspx" />
     <Content Include="Views\Checkout.aspx" />
+    <Content Include="Views\Logout.aspx" />
+    <Content Include="Views\ProductDetails.aspx" />
+    <Content Include="Views\Wishlist.aspx" />
     <Content Include="Views\MyPage.aspx" />
     <Content Include="Views\Register.aspx" />
     <Content Include="Views\Index.aspx" />
     <Content Include="Views\Login.aspx" />
     <Content Include="Views\ThankYou.aspx" />
-    <Content Include="Wishlist.aspx" />
-    <Content Include="ProductDetail.aspx" />
-    <Content Include="Logout.aspx" />
-    <Content Include="Index00.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -238,42 +237,14 @@
     <Compile Include="DTO\CartDTO.cs" />
     <Compile Include="DTO\ProductDTO.cs" />
     <Compile Include="DTO\LoginDTO.cs" />
+    <Compile Include="Models\Product1.cs" />
     <Compile Include="Models\ThankYou.cs" />
     <Compile Include="Models\MyPage.cs" />
     <Compile Include="Models\UserRegist.cs" />
     <Compile Include="Models\Wishlist.cs" />
     <Compile Include="Models\Cart.cs" />
-    <Compile Include="Models\Product.cs" />
-    <Compile Include="Wishlist.aspx.cs">
-      <DependentUpon>Wishlist.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Wishlist.aspx.designer.cs">
-      <DependentUpon>Wishlist.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Order.cs" />
-    <Compile Include="ProductDetail.aspx.cs">
-      <DependentUpon>ProductDetail.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ProductDetail.aspx.designer.cs">
-      <DependentUpon>ProductDetail.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Logout.aspx.cs">
-      <DependentUpon>Logout.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Logout.aspx.designer.cs">
-      <DependentUpon>Logout.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Index00.aspx.cs">
-      <DependentUpon>Index00.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Index00.aspx.designer.cs">
-      <DependentUpon>Index00.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -315,6 +286,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CSS\" />
     <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>

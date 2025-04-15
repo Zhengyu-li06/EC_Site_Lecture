@@ -73,7 +73,7 @@ public class WishlistModel
             const string query = @"
                 SELECT p.ProductId, p.ProductName, p.Price, p.ImageUrl
                 FROM Wishlist w
-                INNER JOIN Product p ON w.ProductId = p.ProductId
+                INNER JOIN Products p ON w.ProductId = p.ProductId
                 WHERE w.UserId = @UserId";
 
             using (SqlCommand cmd = new SqlCommand(query, conn))

@@ -5,7 +5,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
-using YourNamespace;
+using EC_Site_Lecture;
 
 namespace EC_Site_Lecture
 {

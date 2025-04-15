@@ -169,5 +169,69 @@ namespace EC_Site_Lecture.Models
                 System.Diagnostics.Debug.WriteLine("email error: " + ex.Message);
             }
         }
+
+        public List<OrderDTO> GetOrdersByUserId(int userId)
+        {
+            var orders = new List<OrderDTO>();
+            string connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string sql = @"SELECT OrderId, OrderDate, TotalAmount, Status FROM Orders WHERE UserId = @UserId ORDER BY OrderDate DESC";
+
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            orders.Add(new OrderDTO
+                            {
+                                OrderId = Convert.ToInt32(reader["OrderId"]),
+                                OrderDate = Convert.ToDateTime(reader["OrderDate"]),
+                                TotalAmount = Convert.ToDecimal(reader["TotalAmount"]),
+                                Status = reader["Status"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            return orders;
+        }
+
+        public RegisterDTO GetUserInfoByUserId(int userId)
+        {
+            var user = new RegisterDTO();
+            string connStr = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
+
+            using (var conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+                string sql = "SELECT UserId, Username, Email, DateCreated FROM Users WHERE UserId = @UserId";
+
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            user.UserId = userId;
+                            user.Username = reader["Username"].ToString();
+                            user.Email = reader["Email"].ToString();
+                            user.DateCreated = Convert.ToDateTime(reader["DateCreated"]);
+                        }
+                    }
+                }
+            }
+
+            return user;
+        }
+
+
+
     }
 }

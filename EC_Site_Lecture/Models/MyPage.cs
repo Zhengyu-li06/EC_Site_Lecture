@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
 
 namespace EC_Site_Lecture.Models
 {
@@ -19,7 +15,7 @@ namespace EC_Site_Lecture.Models
             _connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
         }
 
-        // 获取用户信息
+        
         public User GetUserById(int userId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -43,7 +39,7 @@ namespace EC_Site_Lecture.Models
             return null;
         }
 
-        // 获取用户的所有订单
+    
         public List<OrderDTO> GetOrdersByUserId(int userId)
         {
             List<OrderDTO> orders = new List<OrderDTO>();
@@ -76,7 +72,6 @@ namespace EC_Site_Lecture.Models
             return orders;
         }
 
-        // 更新用户名
         public void UpdateUsername(int userId, string newUsername)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -90,7 +85,7 @@ namespace EC_Site_Lecture.Models
             }
         }
 
-        // 删除用户
+
         public void DeleteUser(int userId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))

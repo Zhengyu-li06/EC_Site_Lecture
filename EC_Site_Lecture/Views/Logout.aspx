@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Logout.aspx.cs" Inherits="YourNamespace.Logout" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -45,11 +45,29 @@
         <a href="/Logout.aspx">ログアウト</a>
     </div>
 
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" method="post">
+        <%
+            if (IsPostBack)
+            {
+                Session.Clear();
+                Session.Abandon();
+                System.Web.Security.FormsAuthentication.SignOut();
+
+                if (Request.Cookies[".ASPXAUTH"] != null)
+                {
+                    var cookie = new HttpCookie(".ASPXAUTH");
+                    cookie.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Add(cookie);
+                }
+
+                Response.Redirect("~/Views/Index.aspx");
+            }
+        %>
+
         <div class="logout-message">
             <h2>ログアウトしています...</h2>
+            <input type="submit" value="ログアウト実行" />
         </div>
     </form>
 </body>
 </html>
-
