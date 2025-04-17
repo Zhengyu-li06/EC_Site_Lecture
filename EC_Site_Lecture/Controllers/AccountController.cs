@@ -17,7 +17,7 @@ namespace EC_Site_Lecture.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Redirect("/Login.aspx?error=1");
+                return Redirect("/Login?error=1");
             }
 
             var user = EC_Site_Lecture.Models.User.GetByUsernameOrEmail(model.UsernameOrEmail);
@@ -46,7 +46,7 @@ namespace EC_Site_Lecture.Controllers
 
             }
 
-            return Redirect("/Views/Login.aspx?error=1");
+            return Redirect("/Views/Login?error=1");
         }
 
 

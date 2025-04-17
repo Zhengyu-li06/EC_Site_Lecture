@@ -145,13 +145,29 @@
             foreach (var item in products)
             {
     %>
-        <div class="product-card">
-            <img src="<%= item.ImageUrl %>" alt="商品画像" style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px;" />
-            <h3><%= item.Name %></h3>
-            <p>価格：¥<%= item.Price %></p>
-            <p>在庫：<%= item.Quantity %></p>
-            <a href="/AdminProduct/Edit?id=<%= item.Id %>" class="btn-edit">編集</a>
-        </div>
+    <div class="product-card">
+        <% if (item.ImageData != null && item.ImageData.Length > 0) { %>
+            <img src="data:image/png;base64,<%= Convert.ToBase64String(item.ImageData) %>" 
+                 alt="商品画像" 
+                 style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px;" />
+        <% } else { %>
+            <img src="<%= item.ImageUrl %>" 
+                 alt="商品画像" 
+                 style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px;" />
+        <% } %>
+
+        <h3><%= item.Name %></h3>
+        <p>価格：¥<%= item.Price %></p>
+        <p>在庫：<%= item.Quantity %></p>
+
+        <% if (item.IsDiscontinued) { %>
+            <p style="color: red; font-weight: bold;">販売中止</p>
+        <% } else if (item.IsNewArrival) { %>
+            <p style="color: green; font-weight: bold;">新入荷</p>
+        <% } %>
+
+        <a href="/AdminProduct/Edit?id=<%= item.Id %>" class="btn-edit">編集</a>
+    </div>
     <%
             }
         }

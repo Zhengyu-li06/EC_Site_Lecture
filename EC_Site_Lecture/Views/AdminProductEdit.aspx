@@ -13,6 +13,23 @@
 <html>
 <head>
     <title>商品編集</title>
+    <script>
+        function updateHiddenState() {
+            const isDis = document.getElementById("chkDiscontinued").checked;
+            const isNew = document.getElementById("chkNewArrival").checked;
+
+            
+            document.getElementById("chkNewArrival").disabled = isDis;
+            document.getElementById("chkDiscontinued").disabled = isNew;
+
+            document.getElementById("hiddenDiscontinued").value = isDis;
+            document.getElementById("hiddenNewArrival").value = isNew;
+        }
+
+        window.onload = function () {
+            updateHiddenState(); 
+        };
+    </script>
     <style>
         form {
             max-width: 500px;
@@ -46,7 +63,7 @@
     </style>
 </head>
 <body>
-    <form method="post" action="/AdminProduct/Update">
+<form method="post" action="/AdminProduct/Update" enctype="multipart/form-data">
         <input type="hidden" name="Id" value="<%= product.Id %>" />
 
         <div class="form-group">
@@ -70,10 +87,34 @@
         </div>
 
         <div class="form-group">
-            <label>画像URL</label>
+            <label>画像URL（外部リンク）</label>
             <input type="text" name="ImageUrl" value="<%= product.ImageUrl %>" />
         </div>
 
+        <div class="form-group">
+            <label>画像ファイル（アップロード）</label>
+            <input type="file" name="UploadedImage" accept="image/*" />
+        </div>
+
+
+        <!-- checkbox 表单 -->
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="chkDiscontinued" onclick="updateHiddenState()"
+                       <%= product.IsDiscontinued ? "checked" : "" %> />
+                販売中止
+            </label>
+            <input type="hidden" name="IsDiscontinued" id="hiddenDiscontinued" value="<%= product.IsDiscontinued ? "true" : "false" %>" />
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="chkNewArrival" onclick="updateHiddenState()"
+                       <%= product.IsNewArrival ? "checked" : "" %> />
+                新入荷
+            </label>
+            <input type="hidden" name="IsNewArrival" id="hiddenNewArrival" value="<%= product.IsNewArrival ? "true" : "false" %>" />
+        </div>
         <button type="submit">保存</button>
     </form>
 </body>

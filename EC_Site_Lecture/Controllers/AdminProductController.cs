@@ -62,9 +62,11 @@ namespace EC_Site_Lecture.Controllers
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
                 return Redirect("/Views/AdminLogin.aspx");
 
+           
             bool result = AdminProduct.Update(dto);
             return RedirectToAction("Index");
         }
+
 
     }
 }
