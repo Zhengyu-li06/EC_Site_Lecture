@@ -33,7 +33,7 @@ namespace EC_Site_Lecture.Controllers
 
         
         [HttpPost]
-        public ActionResult ConfirmPurchase(string customerName, string customerAddress, string customerPhone)
+        public ActionResult ConfirmPurchase(string customerName, string customerAddress, string customerPhone, double finalAmount)
         {
             var sessionCart = Session["CartItems"] as List<CartDto>;
 
@@ -45,7 +45,8 @@ namespace EC_Site_Lecture.Controllers
             int userId = Session["UserId"] != null ? (int)Session["UserId"] : 1;
             string customerEmail = _orderModel.GetUserEmail(userId);
             var cartProducts = _orderModel.GetCartProducts(sessionCart);
-            double totalAmount = cartProducts.Sum(p => p.Price * p.CartQuantity);
+            //double totalAmount = cartProducts.Sum(p => p.Price * p.CartQuantity);
+            double totalAmount = finalAmount;
 
             int orderId = _orderModel.InsertOrder(userId, customerName, customerAddress, customerPhone, customerEmail, totalAmount);
             _orderModel.InsertOrderItems(orderId, cartProducts);

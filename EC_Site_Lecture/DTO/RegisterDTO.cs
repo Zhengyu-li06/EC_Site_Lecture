@@ -14,6 +14,12 @@ namespace EC_Site_Lecture.Models
         public string ConfirmPassword { get; set; }
 
         public DateTime DateCreated { get; set; }
+
+        // ▼ クーポン関連（表示用）
+        public string CouponLabel { get; set; }     // 例: "40% OFF"、"20% OFF"、"対象外"
+        public string CouponColor { get; set; }     // 例: "red"、"green"、"gray"
+
+        public string CouponStatus { get; set; }
     }
 }
 

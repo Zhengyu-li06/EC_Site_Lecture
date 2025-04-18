@@ -38,8 +38,39 @@ namespace EC_Site_Lecture.Models
 
             return null;
         }
+       
+        public RegisterDTO GetUserInfoByUserId(int userId)
+        {
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT UserId, Username, Email, DateCreated, CouponStatus FROM Users WHERE UserId = @UserId";
 
-    
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new RegisterDTO
+                            {
+                                UserId = (int)reader["UserId"],
+                                Username = reader["Username"].ToString(),
+                                Email = reader["Email"].ToString(),
+                                DateCreated = (DateTime)reader["DateCreated"],
+                                CouponStatus = reader["CouponStatus"]?.ToString() ?? "対象外"
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
         public List<OrderDTO> GetOrdersByUserId(int userId)
         {
             List<OrderDTO> orders = new List<OrderDTO>();

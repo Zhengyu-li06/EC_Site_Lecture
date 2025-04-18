@@ -108,11 +108,44 @@
         .top-bar a:hover {
             background-color: #005c99;
         }
+        .navbar {
+            background-color: #007acc;
+            padding: 15px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
-    <h2>商品一覧（管理者）</h2>
 
+    <div class="navbar">
+        <h1>📋 管理者メニュー</h1>
+        <div>
+            <a href="/Views/AdminProductList.aspx">商品管理</a>
+            <a href="/Views/AdminShippingList.aspx">発送管理</a>
+            <a href="/Views/AdminCouponList.aspx">クーポン管理</a>
+        </div>
+    </div>
+        <h2>商品一覧（管理者）</h2>
     <div class="top-bar">
         <a href="/Views/AdminProductAdd.aspx">＋ 商品追加</a>
     </div>

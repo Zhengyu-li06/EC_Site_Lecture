@@ -138,6 +138,25 @@
             List<CartDto> cartItems = cartModel.GetCartItems(userId);
             double totalAmount = 0;
 
+            // ✅ クーポン情報取得
+            var couponUser = new EC_Site_Lecture.Models.MyPageModel().GetUserInfoByUserId(userId);
+            double discountRate = 0;
+            string couponMessage = "";
+
+            if (couponUser != null)
+            {
+                if (couponUser.CouponStatus == "40%OFF")
+                {
+                    discountRate = 0.40;
+                    couponMessage = "🎉 40%OFF クーポンが適用されました！";
+                }
+                else if (couponUser.CouponStatus == "20%OFF")
+                {
+                    discountRate = 0.20;
+                    couponMessage = "🔔 20%OFF クーポンが適用されました！";
+                }
+            }
+
             if (cartItems.Count == 0)
             {
         %>
@@ -177,9 +196,19 @@
             </div>
         <%
                 } // foreach
+
+                double discountAmount = totalAmount * discountRate;
+                double finalAmount = totalAmount - discountAmount;
         %>
             <div class="total">
-                合計金額: <%= totalAmount.ToString("N0") %> 円
+                合計金額: ¥<%= totalAmount.ToString("N0") %><br />
+                <% if (discountRate > 0) { %>
+                    <span style="color: green;"><%= couponMessage %></span><br />
+                    クーポン割引: -¥<%= discountAmount.ToString("N0") %><br />
+                    <strong>お支払い金額: ¥<%= finalAmount.ToString("N0") %></strong>
+                <% } else { %>
+                    <strong>お支払い金額: ¥<%= totalAmount.ToString("N0") %></strong>
+                <% } %>
             </div>
 
             <!-- 配送先フォーム -->
@@ -197,6 +226,10 @@
 
                 <label for="email">メールアドレス:</label>
                 <input type="text" name="email" id="email" />
+
+                <!-- クーポン計算金額送信（必要なら） -->
+               <input type="hidden" name="finalAmount" value="<%= finalAmount %>" />
+
 
                 <button type="submit">購入を確定</button>
             </form>
