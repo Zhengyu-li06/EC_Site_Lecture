@@ -170,3 +170,13 @@ C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture
 C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\obj\Debug\EC_Site_.5C8EAF49.Up2Date
 C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\obj\Debug\EC_Site_Lecture.dll
 C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\obj\Debug\EC_Site_Lecture.pdb
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\BCrypt.Net-Next.dll
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\System.Buffers.dll
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\System.Memory.dll
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\System.Numerics.Vectors.dll
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\BCrypt.Net-Next.xml
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\System.Buffers.xml
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\System.Memory.xml
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\System.Numerics.Vectors.xml
+C:\Users\Li Zhengyu\Downloads\EC_Site_Lecture_02\EC_Site_Lecture\EC_Site_Lecture\bin\System.Runtime.CompilerServices.Unsafe.xml
