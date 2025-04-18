@@ -1,1 +1,21 @@
+# Visual Studio settings
 .vs/
+*.user
+*.suo
+
+# Build output
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+*.cache
+*.txt
+*.xml
+
+# NuGet packages
+packages/
+packages.config
+
+# Others
+*.dtbcache.json
