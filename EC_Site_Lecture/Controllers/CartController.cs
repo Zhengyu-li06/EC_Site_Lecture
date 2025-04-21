@@ -17,7 +17,7 @@ namespace EC_Site_Lecture.Controllers
 
             if (userId == 0)
             {
-                return RedirectToAction("Login", "Account");
+                return Redirect("/Views/Login.aspx");
             }
 
             List<CartDto> cartItems = cartModel.GetCartItems(userId);

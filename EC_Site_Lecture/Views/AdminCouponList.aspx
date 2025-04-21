@@ -88,11 +88,12 @@
     
     <div class="navbar">
         <h1>📋 管理者メニュー</h1>
-        <div>
-            <a href="/Views/AdminProductList.aspx">商品管理</a>
-            <a href="/Views/AdminShippingList.aspx">発送管理</a>
-            <a href="/Views/AdminCouponList.aspx">クーポン管理</a>
-        </div>
+         <div>
+             <a href="/Views/AdminProductList.aspx">商品管理</a>
+             <a href="/Views/AdminShippingList.aspx">発送管理</a>
+             <a href="/Views/AdminCouponList.aspx">クーポン管理</a>
+             <a href="/Views/SalesSummary.aspx">売上集計</a>
+         </div>
     </div>
 
     <h2>クーポン管理</h2>

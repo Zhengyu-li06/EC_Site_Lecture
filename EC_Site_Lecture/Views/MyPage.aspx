@@ -193,5 +193,9 @@
             <% }} %>
         </div>
     </div>
+<form method="post" action="/MyPage/GenerateReport" style="text-align:right;">
+    <button type="submit">📄 注文レポートをダウンロード</button>
+</form>
+
 </body>
 </html>
