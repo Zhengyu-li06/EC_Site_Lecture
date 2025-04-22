@@ -41,7 +41,7 @@ namespace EC_Site_Lecture.Controllers
 
             if (userId == 0)
             {
-                return RedirectToAction("Login", "Account");
+                return Redirect("/Views/Login.aspx");
             }
 
             cartModel.UpdateQuantity(userId, productId, action);
@@ -50,7 +50,7 @@ namespace EC_Site_Lecture.Controllers
             List<CartDto> updatedCartItems = cartModel.GetCartItems(userId);
             Session["CartItems"] = updatedCartItems;
 
-            return RedirectToAction("Index");
+            return Redirect("/Views/Index.aspx");
         }
 
         public ActionResult RemoveFromCart(int productId)
@@ -59,7 +59,7 @@ namespace EC_Site_Lecture.Controllers
 
             if (userId == 0)
             {
-                return RedirectToAction("Login", "Account");
+                return Redirect("/Views/Login.aspx");
             }
 
             cartModel.UpdateQuantity(userId, productId, "Delete");
@@ -67,7 +67,7 @@ namespace EC_Site_Lecture.Controllers
             List<CartDto> updatedCartItems = cartModel.GetCartItems(userId);
             Session["CartItems"] = updatedCartItems;
 
-            return RedirectToAction("Index");
+            return Redirect("/Views/Index.aspx");
         }
 
         public ActionResult UpdateQuantity2(int productId, string action)
@@ -76,7 +76,7 @@ namespace EC_Site_Lecture.Controllers
 
             if (userId == 0)
             {
-                return RedirectToAction("Login", "Account");
+                return Redirect("/Views/Login.aspx");
             }
 
             cartModel.UpdateQuantity(userId, productId, action);
@@ -94,7 +94,7 @@ namespace EC_Site_Lecture.Controllers
 
             if (userId == 0)
             {
-                return RedirectToAction("Login", "Account");
+                return Redirect("/Views/Login.aspx");
             }
 
             cartModel.UpdateQuantity(userId, productId, "Delete");
@@ -113,7 +113,7 @@ namespace EC_Site_Lecture.Controllers
 
             if (userId == 0)
             {
-                return RedirectToAction("Login", "Account");
+                return Redirect("/Views/Login.aspx");
             }
 
             List<CartDto> cartItems = cartModel.GetCartItems(userId);
@@ -134,7 +134,7 @@ namespace EC_Site_Lecture.Controllers
 
             if (userId == 0)
             {
-                return RedirectToAction("Login", "Account");
+                return Redirect("/Views/Login.aspx");
             }
 
             List<CartDto> cartItems = cartModel.GetCartItems(userId);

@@ -39,7 +39,7 @@ namespace EC_Site_Lecture.Controllers
 
             if (sessionCart == null || !sessionCart.Any())
             {
-                return RedirectToAction("Index", "Cart");
+                return Redirect("~/Views/Index.aspx");
             }
 
             int userId = Session["UserId"] != null ? (int)Session["UserId"] : 1;

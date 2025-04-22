@@ -72,7 +72,7 @@ namespace EC_Site_Lecture.Models
                                 Price = double.TryParse(reader["Price"].ToString(), out double price) ? price : 0,
                                 Description = reader["Description"].ToString(),
                                 ImageUrl = reader["ImageUrl"].ToString(),
-                                CartQuantity = 0, // 后面由 controller 设置
+                                CartQuantity = 0,
                                 IsInWishlist = Convert.ToInt32(reader["IsInWishlist"]) == 1
                             });
                         }

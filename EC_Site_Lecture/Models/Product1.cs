@@ -33,17 +33,19 @@ namespace EC_Site_Lecture.Models
             FROM Products p
             LEFT JOIN Wishlist w ON p.ProductId = w.ProductId AND w.UserId = @UserId
         ";
-
                 var conditions = new List<string>();
+
+                
+                conditions.Add("p.IsDiscontinued = 0");
+
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     conditions.Add("(p.ProductName LIKE @keyword OR p.Description LIKE @keyword)");
                 }
 
-                if (conditions.Count > 0)
-                {
-                    sql += " WHERE " + string.Join(" AND ", conditions);
-                }
+                sql += " WHERE " + string.Join(" AND ", conditions);
+
+                
 
                 switch (sortOption)
                 {

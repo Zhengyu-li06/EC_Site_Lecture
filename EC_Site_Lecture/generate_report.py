@@ -7,19 +7,19 @@ def create_excel(json_file, output_file):
         data = json.load(f)
 
     if not data:
-        print("⚠️ データが空です")
+        print("データが空です")
         return
 
     df = pd.DataFrame(data)
     df.columns = ['注文ID', '合計金額', '氏名', '住所', '電話番号', 'メール', '注文日', 'ステータス']
 
     df.to_excel(output_file, index=False)
-    print(f"✅ Excel 出力完了: {output_file}")
+    print(f"Excel 出力完了: {output_file}")
 
 if __name__ == "__main__":
-    print("📥 Python script started")
+    print("Python script started")
     if len(sys.argv) != 3:
-        print("❌ 引数エラー: JSONファイルパスと出力パスが必要です")
+        print("引数エラー: JSONファイルパスと出力パスが必要です")
     else:
         json_path = sys.argv[1]
         output_path = sys.argv[2]
