@@ -165,7 +165,7 @@
             List<CartDto> cartItems = cartModel.GetCartItems(userId);
             double totalAmount = 0;
 
-            // ✅ クーポン情報取得
+            // クーポン情報取得
             var couponUser = new EC_Site_Lecture.Models.MyPageModel().GetUserInfoByUserId(userId);
             double discountRate = 0;
             string couponMessage = "";
@@ -254,7 +254,6 @@
                 <label for="email">メールアドレス:</label>
                 <input type="text" name="email" id="email" />
 
-                <!-- クーポン計算金額送信（必要なら） -->
                <input type="hidden" name="finalAmount" value="<%= finalAmount %>" />
 
 

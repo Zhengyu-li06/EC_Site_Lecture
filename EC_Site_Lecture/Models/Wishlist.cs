@@ -1,101 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
 using EC_Site_Lecture.DTO;
 using EC_Site_Lecture.ScreenDTO;
 
-public class WishlistModel
+namespace EC_Site_Lecture.Models
 {
-    private readonly string _connectionString;
-
-    public WishlistModel()
+    public class WishlistModel : CommonModel // ✅ 继承 CommonModel
     {
-        _connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
-    }
-
-    public bool IsInWishlist(int userId, int productId)
-    {
-        using (SqlConnection conn = new SqlConnection(_connectionString))
+        public bool IsInWishlist(int userId, int productId)
         {
-            conn.Open();
-            const string query = "SELECT COUNT(*) FROM Wishlist WHERE UserId = @UserId AND ProductId = @ProductId";
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                cmd.Parameters.AddWithValue("@UserId", userId);
-                cmd.Parameters.AddWithValue("@ProductId", productId);
+                conn.Open();
+                const string query = "SELECT COUNT(*) FROM Wishlist WHERE UserId = @UserId AND ProductId = @ProductId";
 
-                return (int)cmd.ExecuteScalar() > 0;
-            }
-        }
-    }
-
-    public void AddToWishlist(int userId, int productId)
-    {
-        using (SqlConnection conn = new SqlConnection(_connectionString))
-        {
-            conn.Open();
-            const string query = "INSERT INTO Wishlist (UserId, ProductId) VALUES (@UserId, @ProductId)";
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@UserId", userId);
-                cmd.Parameters.AddWithValue("@ProductId", productId);
-                cmd.ExecuteNonQuery();
-            }
-        }
-    }
-
-    public void RemoveFromWishlist(int userId, int productId)
-    {
-        using (SqlConnection conn = new SqlConnection(_connectionString))
-        {
-            conn.Open();
-            const string query = "DELETE FROM Wishlist WHERE UserId = @UserId AND ProductId = @ProductId";
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@UserId", userId);
-                cmd.Parameters.AddWithValue("@ProductId", productId);
-                cmd.ExecuteNonQuery();
-            }
-        }
-    }
-
-    public List<WishlistDTO> GetWishlistByUserId(int userId)
-    {
-        var items = new List<WishlistDTO>();
-
-        using (SqlConnection conn = new SqlConnection(_connectionString))
-        {
-            conn.Open();
-            const string query = @"
-                SELECT p.ProductId, p.ProductName, p.Price, p.ImageUrl
-                FROM Wishlist w
-                INNER JOIN Products p ON w.ProductId = p.ProductId
-                WHERE w.UserId = @UserId";
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    while (reader.Read())
-                    {
-                        items.Add(new WishlistDTO
-                        {
-                            ProductId = reader.GetInt32(0),
-                            ProductName = reader.GetString(1),
-                            Price = Convert.ToDouble(reader["Price"]),
-                            ImageUrl = reader["ImageUrl"].ToString()
-                        });
-                    }
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@ProductId", productId);
+
+                    return (int)cmd.ExecuteScalar() > 0;
                 }
             }
         }
 
-        return items;
+        public void AddToWishlist(int userId, int productId)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                const string query = "INSERT INTO Wishlist (UserId, ProductId) VALUES (@UserId, @ProductId)";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@ProductId", productId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void RemoveFromWishlist(int userId, int productId)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                const string query = "DELETE FROM Wishlist WHERE UserId = @UserId AND ProductId = @ProductId";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@ProductId", productId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<WishlistDTO> GetWishlistByUserId(int userId)
+        {
+            var items = new List<WishlistDTO>();
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                const string query = @"
+                    SELECT p.ProductId, p.ProductName, p.Price, p.ImageUrl
+                    FROM Wishlist w
+                    INNER JOIN Products p ON w.ProductId = p.ProductId
+                    WHERE w.UserId = @UserId";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            items.Add(new WishlistDTO
+                            {
+                                ProductId = reader.GetInt32(0),
+                                ProductName = reader.GetString(1),
+                                Price = Convert.ToDouble(reader["Price"]),
+                                ImageUrl = reader["ImageUrl"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            return items;
+        }
     }
 }

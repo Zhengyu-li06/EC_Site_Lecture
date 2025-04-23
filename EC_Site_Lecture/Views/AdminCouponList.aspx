@@ -99,26 +99,31 @@
     <h2>クーポン管理</h2>
 
     <div class="user-container">
-    <%
-        var users = EC_Site_Lecture.Models.AdminCoupon.GetEligibleUsers();
+<%
+    var couponModel = new EC_Site_Lecture.Models.AdminCoupon(); 
+    var users = couponModel.GetEligibleUsers(); 
 
-        foreach (var user in users)
+    foreach (var user in users)
+    {
+        string badgeClass = "";
+        string badgeText = "";
+
+        switch (user.CouponStatus)
         {
-            TimeSpan timeSinceRegistered = DateTime.Now - user.DateCreated;
-            string badgeClass = "badge-0";
-            string badgeText = "適用外";
-
-            if (timeSinceRegistered.TotalDays <= 7)
-            {
+            case "40%OFF":
                 badgeClass = "badge-40";
                 badgeText = "40% OFF";
-            }
-            else if (timeSinceRegistered.TotalDays <= 30)
-            {
+                break;
+            case "20%OFF":
                 badgeClass = "badge-20";
                 badgeText = "20% OFF";
-            }
-    %>
+                break;
+            default:
+                badgeClass = "badge-0";
+                badgeText = "適用外";
+                break;
+        }
+%>
         <div class="user-card">
             <h3><%= user.Username %></h3>
             <p>登録日: <%= user.DateCreated.ToString("yyyy-MM-dd") %></p>

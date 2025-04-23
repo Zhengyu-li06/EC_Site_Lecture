@@ -11,8 +11,7 @@ namespace EC_Site_Lecture.Models
         private static readonly string _connectionString =
             ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
 
-        // 📦 すべての出荷情報を取得
-        public static List<ShippingStatusDTO> GetAll()
+        public List<ShippingStatusDTO> GetAll()
         {
             var list = new List<ShippingStatusDTO>();
 
@@ -47,8 +46,7 @@ namespace EC_Site_Lecture.Models
 
         }
 
-        // 🚚 IDで1件取得
-        public static ShippingStatusDTO GetById(int id)
+        public ShippingStatusDTO GetById(int id)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
@@ -83,8 +81,7 @@ namespace EC_Site_Lecture.Models
             return null;
         }
 
-        // ✏️ 更新処理
-        public static bool Update(ShippingStatusDTO dto)
+        public bool Update(ShippingStatusDTO dto)
         {
             using (var conn = new SqlConnection(_connectionString))
             {

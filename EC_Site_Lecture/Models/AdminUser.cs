@@ -1,31 +1,26 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
-using BCrypt.Net;
-
-
-using System.Web.Helpers;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace EC_Site_Lecture.Models
 {
-    public class AdminUser
+    public class AdminUser : CommonModel 
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public bool IsActive { get; set; }
 
-        private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
-
-        public static AdminUser GetByUsernameOrEmail(string usernameOrEmail)
+        
+        public AdminUser GetByUsernameOrEmail(string usernameOrEmail)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-               
+
                 string query = @"
                             SELECT id, username, email, password_hash, is_active
                             FROM admin_users
@@ -64,11 +59,10 @@ namespace EC_Site_Lecture.Models
                 var sb = new StringBuilder();
                 foreach (var b in bytes)
                 {
-                    sb.Append(b.ToString("x2")); 
+                    sb.Append(b.ToString("x2"));
                 }
                 return sb.ToString();
             }
         }
-
     }
 }

@@ -10,17 +10,18 @@ using EC_Site_Lecture.ScreenDTO;
 
 namespace EC_Site_Lecture.Models
 {
-    public class AdminProduct
+    public class AdminProduct:CommonModel
     {
-        private static readonly string _connectionString =
-            ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
+     
 
 
-        public static List<AdminProductDTO> GetAll(string keyword = "", string sortOption = "order", int userId = 0)
+        public List<AdminProductDTO> GetAll(string keyword = "", string sortOption = "order", int userId = 0)
         {
             var products = new List<AdminProductDTO>();
 
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(_connectionString)) 
+
+
             {
                 connection.Open();
 
@@ -97,7 +98,7 @@ namespace EC_Site_Lecture.Models
         }
 
 
-        public static AdminProductDTO GetById(int id)
+        public  AdminProductDTO GetById(int id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -153,7 +154,7 @@ namespace EC_Site_Lecture.Models
             return null;
         }
 
-        public static bool Add(AdminProductDTO dto)
+        public bool Add(AdminProductDTO dto)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -193,7 +194,7 @@ namespace EC_Site_Lecture.Models
         }
 
 
-        public static bool Update(AdminProductDTO dto)
+        public bool Update(AdminProductDTO dto)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {

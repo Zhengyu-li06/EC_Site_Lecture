@@ -3,26 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using EC_Site_Lecture.DTO; 
 using EC_Site_Lecture.ScreenDTO;
 
 namespace EC_Site_Lecture.Models
 {
-    using EC_Site_Lecture.DTO;
-    using System;
-    using System.Collections.Generic;
-    using System.Data.SqlClient;
-    using System.Configuration;
-
-    public class CartModel
+    public class CartModel : CommonModel 
     {
-        private readonly string connStr = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
-
-       
         public List<CartDto> GetCartItems(int userId)
         {
             var items = new List<CartDto>();
 
-            using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(_connectionString)) 
             {
                 conn.Open();
                 string sql = @"
@@ -54,10 +46,9 @@ namespace EC_Site_Lecture.Models
             return items;
         }
 
-      
         public void UpdateQuantity(int userId, int productId, string action)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
                 string sql = "";
@@ -84,7 +75,7 @@ namespace EC_Site_Lecture.Models
 
         public void AddToCart(int userId, int productId)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
                 string checkQuery = "SELECT COUNT(*) FROM Cart WHERE UserId = @UserId AND ProductId = @ProductId";
@@ -119,11 +110,10 @@ namespace EC_Site_Lecture.Models
             }
         }
 
-     
         public int GetCartItemCount(int userId)
         {
             int itemCount = 0;
-            using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
                 string query = "SELECT SUM(Quantity) FROM Cart WHERE UserId = @UserId";
@@ -138,11 +128,10 @@ namespace EC_Site_Lecture.Models
             return itemCount;
         }
 
-      
         public int GetCartItemCount(int userId, int productId)
         {
             int itemCount = 0;
-            using (SqlConnection conn = new SqlConnection(connStr))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
                 string query = "SELECT Quantity FROM Cart WHERE UserId = @UserId AND ProductId = @ProductId";
@@ -157,9 +146,5 @@ namespace EC_Site_Lecture.Models
             }
             return itemCount;
         }
-
-
-
     }
 }
-

@@ -242,5 +242,45 @@
             <a href="/Views/Cart.aspx">カート (<%= new EC_Site_Lecture.Models.CartModel().GetCartItemCount(userId) %>)</a>
         </div>
     </div>
+<%
+    var bestSeller = EC_Site_Lecture.Models.Product1.GetBestSeller();
+    if (bestSeller != null)
+    {
+%>
+<div id="popupOverlay" style="display: flex; justify-content: center; align-items: center;
+     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+     background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
+    
+    <div id="popupAd" style="background-color: #fffbe6; padding: 20px; border-radius: 12px;
+         border: 2px solid #ffa000; width: 360px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center;">
+        
+        <button onclick="closePopup()" 
+            style="position: absolute; top: 10px; right: 10px; border: none; background: none; font-size: 20px; cursor: pointer;">×</button>
+
+        <h3 style="color: #d35400;">🔥 人気No.1商品！</h3>
+        <img src="<%= bestSeller.ImageUrl %>" alt="人気商品" style="max-width: 100%; border-radius: 8px; margin: 10px 0;" />
+        <p><strong><%= bestSeller.Name %></strong></p>
+        <p style="color: #555;">価格：¥<%= bestSeller.Price.ToString("N0") %></p>
+        <a href="/Views/ProductDetails.aspx?id=<%= bestSeller.Id %>" 
+           style="display: inline-block; margin-top: 10px; background-color: #ff9800; color: white;
+                  padding: 10px 20px; border-radius: 6px; text-decoration: none;">詳しく見る</a>
+    </div>
+</div>
+<% } %>
+<script>
+    function closePopup() {
+        document.getElementById("popupOverlay").style.display = "none";
+    }
+
+    document.addEventListener("click", function (e) {
+        const overlay = document.getElementById("popupOverlay");
+        const popup = document.getElementById("popupAd");
+
+        if (e.target === overlay) {
+            closePopup();
+        }
+    });
+</script>
+
 </body>
 </html>

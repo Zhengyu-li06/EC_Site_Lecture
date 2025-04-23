@@ -8,27 +8,27 @@ namespace EC_Site_Lecture.Controllers
 {
     public class AdminShippingController : Controller
     {
-
         public ActionResult Index()
         {
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
                 return Redirect("/Views/AdminLogin.aspx");
 
-            var list = ShippingStatus.GetAll();
+            var model = new ShippingStatus(); 
+            var list = model.GetAll();        
 
             System.Diagnostics.Debug.WriteLine("取得した件数: " + list.Count);
 
             return View("~/Views/AdminShippingList.aspx", list);
         }
 
-
-
         public ActionResult Edit(int id)
         {
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
                 return Redirect("/Views/AdminLogin.aspx");
 
-            var item = ShippingStatus.GetById(id);
+            var model = new ShippingStatus();   
+            var item = model.GetById(id);       
+
             if (item == null)
                 return RedirectToAction("Index");
 
@@ -45,7 +45,9 @@ namespace EC_Site_Lecture.Controllers
             dto.ShippedDate = string.IsNullOrEmpty(Request["ShippedDate"]) ? (DateTime?)null : Convert.ToDateTime(Request["ShippedDate"]);
             dto.DeliveredDate = string.IsNullOrEmpty(Request["DeliveredDate"]) ? (DateTime?)null : Convert.ToDateTime(Request["DeliveredDate"]);
 
-            bool result = ShippingStatus.Update(dto);
+            var model = new ShippingStatus();     
+            bool result = model.Update(dto);     
+
             return RedirectToAction("Index");
         }
     }

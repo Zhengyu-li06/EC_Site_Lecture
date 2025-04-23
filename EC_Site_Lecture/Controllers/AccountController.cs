@@ -10,6 +10,13 @@ using EC_Site_Lecture.ScreenDTO;
 
 namespace EC_Site_Lecture.Controllers
 {
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Security;
+    using EC_Site_Lecture.Models;
+    using EC_Site_Lecture.DTO;
+
     public class AccountController : Controller
     {
         [HttpPost]
@@ -20,7 +27,9 @@ namespace EC_Site_Lecture.Controllers
                 return Redirect("/Login?error=1");
             }
 
-            var user = EC_Site_Lecture.Models.User.GetByUsernameOrEmail(model.UsernameOrEmail);
+            var userModel = new User(); 
+            var user = userModel.GetByUsernameOrEmail(model.UsernameOrEmail);
+
             if (user != null && user.VerifyPassword(model.Password))
             {
                 Session["UserId"] = user.UserId;
@@ -43,13 +52,10 @@ namespace EC_Site_Lecture.Controllers
                 }
 
                 return Redirect("/Views/Index.aspx");
-
             }
 
             return Redirect("/Views/Login?error=1");
         }
-
-
 
         public ActionResult Logout()
         {
@@ -59,14 +65,15 @@ namespace EC_Site_Lecture.Controllers
 
             if (Request.Cookies[".ASPXAUTH"] != null)
             {
-                var cookie = new HttpCookie(".ASPXAUTH");
-                cookie.Expires = DateTime.Now.AddDays(-1);
+                var cookie = new HttpCookie(".ASPXAUTH")
+                {
+                    Expires = DateTime.Now.AddDays(-1)
+                };
                 Response.Cookies.Add(cookie);
             }
 
-           return Redirect("~/Views/Login.aspx");
+            return Redirect("~/Views/Login.aspx");
         }
-
     }
 
 

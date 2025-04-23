@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -7,11 +6,9 @@ using EC_Site_Lecture.ScreenDTO;
 
 namespace EC_Site_Lecture.Models
 {
-    public class Product
+    public class Product : CommonModel 
     {
-        private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
-
-        public static List<ProductDto> GetAll(string keyword = "", string sortOption = "order", int userId = 0)
+        public List<ProductDto> GetAll(string keyword = "", string sortOption = "order", int userId = 0)
         {
             var products = new List<ProductDto>();
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -82,6 +79,5 @@ namespace EC_Site_Lecture.Models
 
             return products;
         }
-
     }
 }

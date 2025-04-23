@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Configuration;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace EC_Site_Lecture.Models
 {
-    public class User
+    public class User : CommonModel 
     {
         public int UserId { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
 
-        private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
-
-        public static User GetByUsernameOrEmail(string usernameOrEmail)
+        public User GetByUsernameOrEmail(string usernameOrEmail)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_connectionString)) 
             {
                 connection.Open();
                 string query = "SELECT UserId, Username, Email, PasswordHash FROM Users WHERE Username = @UsernameOrEmail OR Email = @UsernameOrEmail";

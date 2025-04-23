@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Configuration;
 using System.Web.Script.Serialization;
+using EC_Site_Lecture.DTO; 
+using System.Configuration;
 
 namespace EC_Site_Lecture.Models
 {
@@ -12,20 +13,13 @@ namespace EC_Site_Lecture.Models
         public decimal TotalSales { get; set; }
     }
 
-    public class SalesSummaryModel
+    public class SalesSummaryModel : CommonModel 
     {
-        private readonly string _connectionString;
-
-        public SalesSummaryModel()
-        {
-            _connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
-        }
-
         public List<SalesSummaryItem> GetSalesSummary()
         {
             var result = new List<SalesSummaryItem>();
 
-            using (var conn = new SqlConnection(_connectionString))
+            using (var conn = new SqlConnection(_connectionString)) 
             {
                 conn.Open();
                 string sql = @"
@@ -62,4 +56,3 @@ namespace EC_Site_Lecture.Models
         }
     }
 }
-

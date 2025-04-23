@@ -16,8 +16,8 @@ namespace EC_Site_Lecture.Controllers
                 return Redirect("/Views/AdminLogin.aspx");
             }
 
-            
-            List<AdminProductDTO> products = AdminProduct.GetAll(keyword, sortOption, 0);
+            var productModel = new AdminProduct(); 
+            List<AdminProductDTO> products = productModel.GetAll(keyword, sortOption, 0);
 
             ViewBag.Keyword = keyword;
             ViewBag.SortOption = sortOption;
@@ -33,22 +33,27 @@ namespace EC_Site_Lecture.Controllers
                 return Redirect("/Views/AdminLogin.aspx");
             }
 
-            bool success = AdminProduct.Add(dto);
+            var model = new AdminProduct(); 
+            bool success = model.Add(dto);
+
             if (success)
             {
-                return RedirectToAction("Index"); // 商品一覧に戻る
+                return RedirectToAction("Index");
             }
             else
             {
                 return Redirect("/Views/AdminProductAdd.aspx?error=1");
             }
         }
+
         public ActionResult Edit(int id)
         {
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
                 return Redirect("/Views/AdminLogin.aspx");
 
-            var product = AdminProduct.GetById(id);
+            var model = new AdminProduct(); 
+            var product = model.GetById(id);
+
             if (product == null)
                 return RedirectToAction("Index");
 
@@ -62,11 +67,10 @@ namespace EC_Site_Lecture.Controllers
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
                 return Redirect("/Views/AdminLogin.aspx");
 
-           
-            bool result = AdminProduct.Update(dto);
+            var model = new AdminProduct(); 
+            bool result = model.Update(dto);
+
             return RedirectToAction("Index");
         }
-
-
     }
 }

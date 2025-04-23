@@ -10,14 +10,13 @@ using EC_Site_Lecture.ScreenDTO;
 
 namespace EC_Site_Lecture.Models
 {
-    public class Order
+    public class Order : CommonModel // ✅ 继承 CommonModel
     {
         public List<ProductDto> GetCartProducts(List<CartDto> cartItems)
         {
             var cartProducts = new List<ProductDto>();
-            string connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
 
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 string productIds = string.Join(",", cartItems.Select(item => item.ProductId));
@@ -45,7 +44,7 @@ namespace EC_Site_Lecture.Models
                             Price = price,
                             Quantity = quantity,
                             CartQuantity = quantity,
-                            IsInWishlist = false 
+                            IsInWishlist = false
                         });
                     }
                 }
@@ -57,9 +56,8 @@ namespace EC_Site_Lecture.Models
         public string GetUserEmail(int userId)
         {
             string email = "";
-            string connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
 
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 string sql = "SELECT Email FROM Users WHERE UserId = @UserId";
@@ -78,9 +76,8 @@ namespace EC_Site_Lecture.Models
         public int InsertOrder(int userId, string name, string address, string phone, string email, double totalAmount)
         {
             int orderId = 0;
-            string connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
 
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 string sql = @"INSERT INTO Orders (UserId, TotalAmount, CustomerName, CustomerAddress, CustomerPhone, CustomerEmail, OrderDate, Status)
@@ -107,9 +104,7 @@ namespace EC_Site_Lecture.Models
 
         public void InsertOrderItems(int orderId, List<ProductDto> cartProducts)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
-
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
@@ -124,7 +119,7 @@ namespace EC_Site_Lecture.Models
                         command.Parameters.AddWithValue("@ProductId", product.Id);
                         command.Parameters.AddWithValue("@ProductName", product.Name);
                         command.Parameters.AddWithValue("@ProductPrice", product.Price);
-                        command.Parameters.AddWithValue("@Quantity", product.CartQuantity); // or product.Quantity
+                        command.Parameters.AddWithValue("@Quantity", product.CartQuantity);
 
                         command.ExecuteNonQuery();
                     }
@@ -173,9 +168,8 @@ namespace EC_Site_Lecture.Models
         public List<OrderDTO> GetOrdersByUserId(int userId)
         {
             var orders = new List<OrderDTO>();
-            string connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
 
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 string sql = @"SELECT OrderId, OrderDate, TotalAmount, Status FROM Orders WHERE UserId = @UserId ORDER BY OrderDate DESC";
@@ -205,9 +199,8 @@ namespace EC_Site_Lecture.Models
         public RegisterDTO GetUserInfoByUserId(int userId)
         {
             var user = new RegisterDTO();
-            string connStr = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
 
-            using (var conn = new SqlConnection(connStr))
+            using (var conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
                 string sql = "SELECT UserId, Username, Email, DateCreated FROM Users WHERE UserId = @UserId";
@@ -230,8 +223,5 @@ namespace EC_Site_Lecture.Models
 
             return user;
         }
-
-
-
     }
 }

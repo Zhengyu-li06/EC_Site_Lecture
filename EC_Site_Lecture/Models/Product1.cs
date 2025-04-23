@@ -74,7 +74,7 @@ namespace EC_Site_Lecture.Models
                                 Price = double.TryParse(reader["Price"].ToString(), out double price) ? price : 0,
                                 Description = reader["Description"].ToString(),
                                 ImageUrl = reader["ImageUrl"].ToString(),
-                                CartQuantity = 0, // 后面由 controller 设置
+                                CartQuantity = 0, 
                                 IsInWishlist = Convert.ToInt32(reader["IsInWishlist"]) == 1
                             });
                         }
@@ -84,6 +84,50 @@ namespace EC_Site_Lecture.Models
 
             return products;
         }
+        public static ProductDto GetBestSeller()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string sql = @"
+            SELECT TOP 1 
+                p.ProductId, 
+                p.ProductName, 
+                p.Price, 
+                p.Description, 
+                p.ImageUrl,
+                SUM(oi.Quantity) AS TotalSold
+            FROM OrderItems oi
+            INNER JOIN Products p ON oi.ProductId = p.ProductId
+            WHERE p.IsDiscontinued = 0
+            GROUP BY p.ProductId, p.ProductName, p.Price, p.Description, p.ImageUrl
+            ORDER BY TotalSold DESC";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new ProductDto
+                            {
+                                Id = (int)reader["ProductId"],
+                                Name = reader["ProductName"].ToString(),
+                                Price = double.TryParse(reader["Price"].ToString(), out double price) ? price : 0,
+                                Description = reader["Description"].ToString(),
+                                ImageUrl = reader["ImageUrl"].ToString(),
+                                CartQuantity = 0,
+                                IsInWishlist = false
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
 
         public static ProductDto GetById(int id)
         {

@@ -133,6 +133,9 @@
         <a href="/Views/Wishlist.aspx" class="wishlist-icon"><i class="fa fa-heart"></i></a>
     </div>
     <div class="container">
+    <form method="post" action="/MyPage/GenerateReport" style="text-align:right;">
+        <button type="submit">注文レポートをダウンロード</button>
+    </form>
         <h2>マイページ</h2>
 
 
@@ -193,9 +196,5 @@
             <% }} %>
         </div>
     </div>
-<form method="post" action="/MyPage/GenerateReport" style="text-align:right;">
-    <button type="submit">📄 注文レポートをダウンロード</button>
-</form>
-
 </body>
 </html>

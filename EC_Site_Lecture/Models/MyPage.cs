@@ -15,7 +15,20 @@ namespace EC_Site_Lecture.Models
             _connectionString = ConfigurationManager.ConnectionStrings["EC_Site_LectureConnectionString"].ConnectionString;
         }
 
-        
+        public void UpdateUser(int userId, string username, string email)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = "UPDATE Users SET Username = @Username, Email = @Email WHERE UserId = @UserId";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Username", username);
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@UserId", userId);
+                command.ExecuteNonQuery();
+            }
+        }
+
         public User GetUserById(int userId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))

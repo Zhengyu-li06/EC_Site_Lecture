@@ -32,7 +32,8 @@ namespace EC_Site_Lecture.Controllers
             string jsonPath = Path.Combine(Path.GetTempPath(), $"sales_summary_{DateTime.Now:yyyyMMddHHmmss}.json");
             System.IO.File.WriteAllText(jsonPath, json);
 
-            string pythonExe = @"C:\Users\Li Zhengyu\AppData\Local\Programs\Python\Python313\python.exe";
+
+            string pythonExe = Server.MapPath("~/Tools/Python/Python313/python.exe");
             string scriptPath = Server.MapPath("~/generate_sales_summary.py"); 
             string excelPath = Path.Combine(Path.GetTempPath(), $"sales_summary_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
 

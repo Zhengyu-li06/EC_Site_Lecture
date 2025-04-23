@@ -3,10 +3,8 @@ using System.Text;
 using System.Web.Mvc;
 using EC_Site_Lecture.DTO;
 using EC_Site_Lecture.Models;
-
-using System.Web.Mvc;
 using System.Web.Security;
-using EC_Site_Lecture.Models;
+
 
 namespace EC_Site_Lecture.Controllers
 {

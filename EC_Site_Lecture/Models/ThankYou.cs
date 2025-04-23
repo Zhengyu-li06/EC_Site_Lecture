@@ -1,5 +1,4 @@
-﻿// 路径：Models/ThankYouModel.cs
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data.SqlClient;
 
 namespace EC_Site_Lecture.Models

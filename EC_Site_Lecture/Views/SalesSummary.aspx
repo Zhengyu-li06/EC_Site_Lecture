@@ -43,7 +43,7 @@
 </head>
 <body>
      <div class="navbar">
-         <h1>📋 管理者メニュー</h1>
+         <h1>管理者メニュー</h1>
          <div>
              <a href="/Views/AdminProductList.aspx">商品管理</a>
              <a href="/Views/AdminShippingList.aspx">発送管理</a>
@@ -52,7 +52,7 @@
          </div>
      </div>
 
-    <h2>📊 売上集計（商品別）</h2>
+    <h2>売上集計（商品別）</h2>
     <form method="post" action="/SalesSummary/ExportExcel">
         <button type="submit">📥 Excel 出力</button>
     </form>

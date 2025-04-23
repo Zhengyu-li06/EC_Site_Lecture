@@ -138,7 +138,7 @@
 <body>
 
     <div class="navbar">
-        <h1>📋 管理者メニュー</h1>
+        <h1>管理者メニュー</h1>
          <div>
              <a href="/Views/AdminProductList.aspx">商品管理</a>
              <a href="/Views/AdminShippingList.aspx">発送管理</a>
@@ -168,11 +168,13 @@
 
    <!-- 商品カード -->
 <div class="product-container">
-    <%
+     <%
         var keyword = Request["keyword"] ?? "";
         var sortOption = Request["sortOption"] ?? "order";
 
-        var products = EC_Site_Lecture.Models.AdminProduct.GetAll(keyword, sortOption);
+        // 管理画面なので userId 固定でも OK（使ってないけど引数必要）
+        var adminProductService = new EC_Site_Lecture.Models.AdminProduct();
+        var products = adminProductService.GetAll(keyword, sortOption, 0);
 
         if (products != null && products.Count > 0)
         {

@@ -23,7 +23,7 @@ namespace EC_Site_Lecture.Controllers.Admin
                 return Redirect("/Views/AdminLogin?error=1");
             }
 
-            var admin = AdminUser.GetByUsernameOrEmail(model.UsernameOrEmail);
+            var admin = new AdminUser().GetByUsernameOrEmail(model.UsernameOrEmail);
             if (admin != null && admin.IsActive && admin.VerifyPassword(model.Password))
             {
                 Session["AdminId"] = admin.Id;

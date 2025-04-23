@@ -89,47 +89,48 @@
 
 
 <%
-    var shippings = EC_Site_Lecture.Models.ShippingStatus.GetAll();
-
+    var shippingModel = new EC_Site_Lecture.Models.ShippingStatus(); 
+    var shippings = shippingModel.GetAll(); 
     if (shippings != null && shippings.Count > 0)
     {
 %>
-        <table>
-            <thead>
+    <table>
+        <thead>
+            <tr>
+                <th>注文ID</th>
+                <th>状態</th>
+                <th>追跡番号</th>
+                <th>発送日</th>
+                <th>配達日</th>
+                <th>備考</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% foreach (var item in shippings) { %>
                 <tr>
-                    <th>注文ID</th>
-                    <th>状態</th>
-                    <th>追跡番号</th>
-                    <th>発送日</th>
-                    <th>配達日</th>
-                    <th>備考</th>
-                    <th>操作</th>
+                    <td><%= item.OrderId %></td>
+                    <td><%= item.Status %></td>
+                    <td><%= item.TrackingNumber %></td>
+                    <td><%= item.ShippedDate?.ToString("yyyy-MM-dd") ?? "-" %></td>
+                    <td><%= item.DeliveredDate?.ToString("yyyy-MM-dd") ?? "-" %></td>
+                    <td><%= item.Note %></td>
+                    <td>
+                        <a href="/AdminShipping/Edit?id=<%= item.ShippingStatusId %>" class="btn-edit">編集</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <% foreach (var item in shippings) { %>
-                    <tr>
-                        <td><%= item.OrderId %></td>
-                        <td><%= item.Status %></td>
-                        <td><%= item.TrackingNumber %></td>
-                        <td><%= item.ShippedDate?.ToString("yyyy-MM-dd") ?? "-" %></td>
-                        <td><%= item.DeliveredDate?.ToString("yyyy-MM-dd") ?? "-" %></td>
-                        <td><%= item.Note %></td>
-                        <td>
-                            <a href="/AdminShipping/Edit?id=<%= item.ShippingStatusId %>" class="btn-edit">編集</a>
-                        </td>
-                    </tr>
-                <% } %>
-            </tbody>
-        </table>
-    <%
-        }
-        else
-        {
-    %>
-        <p style="text-align: center;">発送情報が見つかりませんでした。</p>
-    <%
-        }
-    %>
+            <% } %>
+        </tbody>
+    </table>
+<%
+    }
+    else
+    {
+%>
+    <p style="text-align: center;">発送情報が見つかりませんでした。</p>
+<%
+    }
+%>
+
 </body>
 </html>

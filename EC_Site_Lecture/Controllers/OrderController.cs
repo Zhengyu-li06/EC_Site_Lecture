@@ -3,7 +3,6 @@ using EC_Site_Lecture.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using EC_Site_Lecture.Models;
 
 namespace EC_Site_Lecture.Controllers
 {
@@ -45,7 +44,6 @@ namespace EC_Site_Lecture.Controllers
             int userId = Session["UserId"] != null ? (int)Session["UserId"] : 1;
             string customerEmail = _orderModel.GetUserEmail(userId);
             var cartProducts = _orderModel.GetCartProducts(sessionCart);
-            //double totalAmount = cartProducts.Sum(p => p.Price * p.CartQuantity);
             double totalAmount = finalAmount;
 
             int orderId = _orderModel.InsertOrder(userId, customerName, customerAddress, customerPhone, customerEmail, totalAmount);
