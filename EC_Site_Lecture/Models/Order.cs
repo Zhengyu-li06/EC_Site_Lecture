@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -10,7 +9,7 @@ using EC_Site_Lecture.ScreenDTO;
 
 namespace EC_Site_Lecture.Models
 {
-    public class Order : CommonModel // ✅ 继承 CommonModel
+    public class Order : CommonModel
     {
         public List<ProductDto> GetCartProducts(List<CartDto> cartItems)
         {

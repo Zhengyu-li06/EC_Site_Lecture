@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using EC_Site_Lecture.Models;
 using EC_Site_Lecture.ScreenDTO;
-using System.Collections.Generic;
 
 namespace EC_Site_Lecture.Controllers
 {

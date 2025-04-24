@@ -13,12 +13,12 @@
 <html>
 <head>
     <title>商品編集</title>
+
     <script>
         function updateHiddenState() {
             const isDis = document.getElementById("chkDiscontinued").checked;
             const isNew = document.getElementById("chkNewArrival").checked;
 
-            
             document.getElementById("chkNewArrival").disabled = isDis;
             document.getElementById("chkDiscontinued").disabled = isNew;
 
@@ -27,9 +27,10 @@
         }
 
         window.onload = function () {
-            updateHiddenState(); 
+            updateHiddenState();
         };
     </script>
+
     <style>
         form {
             max-width: 500px;
@@ -39,19 +40,23 @@
             border-radius: 12px;
             box-shadow: 0 0 12px rgba(0,0,0,0.1);
         }
+
         .form-group {
             margin-bottom: 18px;
         }
+
         label {
             display: block;
             font-weight: bold;
         }
+
         input, textarea {
             width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 6px;
         }
+
         button {
             padding: 10px 20px;
             background-color: #5b9bd5;
@@ -60,6 +65,7 @@
             border-radius: 6px;
             cursor: pointer;
         }
+
         .navbar {
             background-color: #007acc;
             padding: 15px 30px;
@@ -84,19 +90,19 @@
         .navbar a:hover {
             text-decoration: underline;
         }
-
     </style>
 </head>
 <body>
-<div class="navbar">
+    <div class="navbar">
         <h1>📋 管理者メニュー</h1>
         <div>
             <a href="/Views/AdminProductList.aspx">商品管理</a>
             <a href="/Views/AdminShippingList.aspx">発送管理</a>
             <a href="/Views/AdminCouponList.aspx">クーポン管理</a>
         </div>
-</div>
-<form method="post" action="/AdminProduct/Update" enctype="multipart/form-data">
+    </div>
+
+    <form method="post" action="/AdminProduct/Update" enctype="multipart/form-data">
         <input type="hidden" name="Id" value="<%= product.Id %>" />
 
         <div class="form-group">
@@ -129,12 +135,9 @@
             <input type="file" name="UploadedImage" accept="image/*" />
         </div>
 
-
-        <!-- checkbox 表单 -->
         <div class="form-group">
             <label>
-                <input type="checkbox" id="chkDiscontinued" onclick="updateHiddenState()"
-                       <%= product.IsDiscontinued ? "checked" : "" %> />
+                <input type="checkbox" id="chkDiscontinued" onclick="updateHiddenState()" <%= product.IsDiscontinued ? "checked" : "" %> />
                 販売中止
             </label>
             <input type="hidden" name="IsDiscontinued" id="hiddenDiscontinued" value="<%= product.IsDiscontinued ? "true" : "false" %>" />
@@ -142,12 +145,12 @@
 
         <div class="form-group">
             <label>
-                <input type="checkbox" id="chkNewArrival" onclick="updateHiddenState()"
-                       <%= product.IsNewArrival ? "checked" : "" %> />
+                <input type="checkbox" id="chkNewArrival" onclick="updateHiddenState()" <%= product.IsNewArrival ? "checked" : "" %> />
                 新入荷
             </label>
             <input type="hidden" name="IsNewArrival" id="hiddenNewArrival" value="<%= product.IsNewArrival ? "true" : "false" %>" />
         </div>
+
         <button type="submit">保存</button>
     </form>
 </body>

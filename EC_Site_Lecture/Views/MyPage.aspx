@@ -8,122 +8,11 @@
 <html>
 <head runat="server">
     <title>マイページ</title>
-    <style>
-       body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: #eef2f7;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 820px;
-            margin: 50px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-        }
-
-        h2 {
-            text-align: center;
-            color: #007acc;
-            margin-bottom: 30px;
-        }
-
-        .section {
-            margin-bottom: 40px;
-        }
-
-        .section h3 {
-            margin-bottom: 15px;
-            color: #333;
-            border-left: 4px solid #007acc;
-            padding-left: 10px;
-            font-size: 18px;
-        }
-
-        .section p {
-            margin: 6px 0;
-            color: #444;
-            font-size: 15px;
-        }
-
-        .coupon-tag {
-            display: inline-block;
-            background: #ffd700;
-            color: #000;
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 14px;
-            margin-top: 8px;
-        }
-
-        .order-summary {
-            border: 1px solid #ccc;
-            padding: 14px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            background: #fdfdfd;
-        }
-
-        form label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        input[type="text"],
-        input[type="email"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 6px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #007acc;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: #005fa3;
-        }
-
-         .navbar {
-             background-color: #4CAF50;
-             padding: 14px 20px;
-             display: flex;
-             justify-content: flex-end;
-             gap: 20px;
-         }
-
-         .navbar a {
-             color: white;
-             text-decoration: none;
-             font-weight: bold;
-             transition: opacity 0.2s;
-         }
-
-         .navbar a:hover {
-             opacity: 0.8;
-         }
-
-
-    </style>
+    <link rel="stylesheet" href="/CSS/common.css" />
+    <link rel="stylesheet" href="/CSS/user.css" />
 </head>
-<body>
+<body class="mypage">
+    <!-- ナビゲーションバー -->
     <div class="navbar">
         <a href="/Views/Index.aspx">商品一覧</a>
         <a href="/Views/MyPage.aspx?userId=<%= Session["UserId"] %>">マイページ</a>
@@ -132,43 +21,42 @@
         <a href="/Views/Logout.aspx">ログアウト</a>
         <a href="/Views/Wishlist.aspx" class="wishlist-icon"><i class="fa fa-heart"></i></a>
     </div>
+
     <div class="container">
-    <form method="post" action="/MyPage/GenerateReport" style="text-align:right;">
-        <button type="submit">注文レポートをダウンロード</button>
-    </form>
+        <!-- 注文レポートボタン -->
+        <form method="post" action="/MyPage/GenerateReport" style="text-align:right;">
+            <button type="submit">注文レポートをダウンロード</button>
+        </form>
+
         <h2>マイページ</h2>
 
-
         <%
-    if (Session["UserId"] == null)
-    {
-        Response.Redirect("/Views/Login.aspx");
-    }
+            if (Session["UserId"] == null)
+            {
+                Response.Redirect("/Views/Login.aspx");
+            }
 
-    int userId = (int)Session["UserId"];
-    var orderModel = new Order();
+            int userId = (int)Session["UserId"];
+            var orderModel = new Order();
+            var user = orderModel.GetUserInfoByUserId(userId);
+            var orders = orderModel.GetOrdersByUserId(userId);
+            var couponUser = new MyPageModel().GetUserInfoByUserId(userId);
+        %>
 
-    var user = orderModel.GetUserInfoByUserId(userId);     
-    var orders = orderModel.GetOrdersByUserId(userId);     
-
-    
-    var couponUser = new EC_Site_Lecture.Models.MyPageModel().GetUserInfoByUserId(userId);
-%>
-
+        <!-- ユーザー情報 -->
         <div class="section">
             <h3>ユーザー情報</h3>
             <p><strong>ユーザー名:</strong> <%= user.Username %></p>
             <p><strong>メールアドレス:</strong> <%= user.Email %></p>
             <p><strong>登録日:</strong> <%= user.DateCreated.ToString("yyyy/MM/dd") %></p>
             <% if (couponUser != null) { %>
-      <% if (couponUser != null) { %>
-        <p><strong>クーポンステータス:</strong>
-            <span class="coupon-tag"><%= couponUser.CouponStatus %></span>
-        </p>
-    <% } %>
-    <% } %>
+                <p><strong>クーポンステータス:</strong>
+                    <span class="coupon-tag"><%= couponUser.CouponStatus %></span>
+                </p>
+            <% } %>
         </div>
 
+        <!-- ユーザー情報編集フォーム -->
         <div class="section">
             <h3>ユーザー情報を編集</h3>
             <form method="post" action="/MyPage/Update">
@@ -182,6 +70,8 @@
                 <button type="submit">変更を保存</button>
             </form>
         </div>
+
+        <!-- 注文履歴 -->
         <div class="section">
             <h3>注文履歴</h3>
             <% if (orders.Count == 0) { %>
@@ -193,7 +83,7 @@
                     <p><strong>合計金額:</strong> ¥<%= order.TotalAmount.ToString("F2") %></p>
                     <p><strong>ステータス:</strong> <%= order.Status %></p>
                 </div>
-            <% }} %>
+            <% } } %>
         </div>
     </div>
 </body>

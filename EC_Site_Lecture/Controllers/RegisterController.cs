@@ -1,9 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Web.Mvc;
-using EC_Site_Lecture.DTO;
 using EC_Site_Lecture.Models;
-using System.Web.Security;
 
 
 namespace EC_Site_Lecture.Controllers

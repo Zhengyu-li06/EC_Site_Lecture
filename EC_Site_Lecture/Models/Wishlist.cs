@@ -6,7 +6,7 @@ using EC_Site_Lecture.ScreenDTO;
 
 namespace EC_Site_Lecture.Models
 {
-    public class WishlistModel : CommonModel // ✅ 继承 CommonModel
+    public class WishlistModel : CommonModel
     {
         public bool IsInWishlist(int userId, int productId)
         {

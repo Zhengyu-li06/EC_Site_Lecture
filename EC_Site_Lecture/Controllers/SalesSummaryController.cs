@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System;
+using System.Text;
 
 namespace EC_Site_Lecture.Controllers
 {
@@ -20,7 +21,6 @@ namespace EC_Site_Lecture.Controllers
         }
 
 
-        [HttpPost]
         public ActionResult ExportExcel()
         {
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
@@ -28,37 +28,28 @@ namespace EC_Site_Lecture.Controllers
 
             var summary = new SalesSummaryModel().GetSalesSummary();
 
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(summary);
-            string jsonPath = Path.Combine(Path.GetTempPath(), $"sales_summary_{DateTime.Now:yyyyMMddHHmmss}.json");
-            System.IO.File.WriteAllText(jsonPath, json);
+            var sb = new StringBuilder();
 
+            sb.Append('\uFEFF');
 
-            string pythonExe = Server.MapPath("~/Tools/Python/Python313/python.exe");
-            string scriptPath = Server.MapPath("~/generate_sales_summary.py"); 
-            string excelPath = Path.Combine(Path.GetTempPath(), $"sales_summary_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
-
-            var psi = new ProcessStartInfo
+            sb.AppendLine("商品名,販売数（合計）,売上金額（合計）");
+            foreach (var item in summary)
             {
-                FileName = pythonExe,
-                Arguments = $"\"{scriptPath}\" \"{jsonPath}\" \"{excelPath}\"",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            using (var process = Process.Start(psi))
-            {
-                string output = process.StandardOutput.ReadToEnd();
-                string error = process.StandardError.ReadToEnd();
-                process.WaitForExit();
-
-                if (!string.IsNullOrEmpty(error))
-                    throw new Exception("Python Error: " + error);
+                sb.AppendLine($"{EscapeCsv(item.ProductName)},{item.TotalQuantity},{item.TotalSales}");
             }
 
-            byte[] fileBytes = System.IO.File.ReadAllBytes(excelPath);
-            return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "売上集計.xlsx");
+            byte[] csvBytes = Encoding.UTF8.GetBytes(sb.ToString());
+
+            return File(csvBytes, "text/csv", "売上集計.csv");
+        }
+
+        private string EscapeCsv(string input)
+        {
+            if (input.Contains(",") || input.Contains("\"") || input.Contains("\n"))
+            {
+                return $"\"{input.Replace("\"", "\"\"")}\"";
+            }
+            return input;
         }
 
     }

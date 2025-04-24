@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
-using EC_Site_Lecture.DTO;
 using EC_Site_Lecture.Models;
 using EC_Site_Lecture.ScreenDTO;
 
@@ -14,7 +10,7 @@ namespace EC_Site_Lecture.Controllers
 
     public class ProductController : Controller
     {
-        private readonly CartModel cartModel = new CartModel();         // ✅ 统一提前实例化
+        private readonly CartModel cartModel = new CartModel();
         private readonly WishlistModel wishlistModel = new WishlistModel();
 
         public ActionResult Index(string keyword = "", string sortOption = "order")
@@ -26,7 +22,7 @@ namespace EC_Site_Lecture.Controllers
             ViewBag.CartCount = cartModel.GetCartItemCount(userId);
             foreach (var product in products)
             {
-                product.CartQuantity = cartModel.GetCartItemCount(userId, product.Id); // ✅ 使用字段
+                product.CartQuantity = cartModel.GetCartItemCount(userId, product.Id);
             }
 
             ViewBag.Keyword = keyword;
@@ -44,7 +40,7 @@ namespace EC_Site_Lecture.Controllers
                 return Redirect("/Views/Login.aspx");
             }
 
-            cartModel.AddToCart(userId, productId); // ✅ 使用字段
+            cartModel.AddToCart(userId, productId);
             return RedirectToAction("Index", new { keyword, sortOption });
         }
 

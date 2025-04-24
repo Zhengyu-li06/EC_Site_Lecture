@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Web.Script.Serialization;
-using EC_Site_Lecture.DTO; 
-using System.Configuration;
 
 namespace EC_Site_Lecture.Models
 {

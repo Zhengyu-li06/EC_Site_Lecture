@@ -1,0 +1,192 @@
+﻿/* =============================
+   ショッピングカートページ
+============================= */
+
+/* 全体レイアウトと背景 */
+body.cart-page {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9fc;
+    margin: 0;
+    padding: 0;
+}
+
+/* ナビゲーションバー */
+.navbar {
+    background-color: #4CAF50;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        transition: opacity 0.2s;
+    }
+
+        .navbar a:hover {
+            opacity: 0.8;
+        }
+
+/* カート全体のコンテナ */
+.container {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* カート内商品ブロック */
+.cart-item {
+    border-bottom: 1px solid #eee;
+    padding: 16px 0;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+    .cart-item img {
+        width: 80px;
+        height: auto;
+        border-radius: 6px;
+    }
+
+    .cart-item h4 {
+        margin: 0 0 6px 0;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .cart-item p {
+        margin: 4px 0;
+        font-size: 14px;
+        color: #555;
+    }
+
+/* ボタン用フォーム（インライン） */
+form.inline-form {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* 数量変更・削除ボタン共通 */
+.btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: #5b9bd5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .btn:hover {
+        background-color: #4a8ac3;
+    }
+
+/* 購入確定ボタン */
+.checkout-btn {
+    margin-top: 20px;
+    padding: 12px;
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .checkout-btn:hover {
+        background-color: #218838;
+    }
+
+/* 合計金額表示 */
+.total {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* カートが空のときの表示 */
+.empty-message {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin-top: 40px;
+}
+
+/* =============================
+   チェックアウトフォームスタイル
+============================= */
+
+.checkout-form {
+    margin-top: 40px;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .checkout-form h3 {
+        font-size: 20px;
+        margin-bottom: 24px;
+        color: #007acc;
+        border-left: 4px solid #007acc;
+        padding-left: 10px;
+    }
+
+    .checkout-form label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: #444;
+        font-size: 14px;
+    }
+
+    .checkout-form input[type="text"],
+    .checkout-form textarea {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+        .checkout-form input:focus,
+        .checkout-form textarea:focus {
+            border-color: #5b9bd5;
+            outline: none;
+        }
+
+    .checkout-form button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .checkout-form button:hover {
+            background-color: #218838;
+        }
+

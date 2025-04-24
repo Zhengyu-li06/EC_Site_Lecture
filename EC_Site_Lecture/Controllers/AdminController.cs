@@ -2,25 +2,20 @@
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using EC_Site_Lecture.DTO;
 using EC_Site_Lecture.Models;
 using EC_Site_Lecture.ScreenDTO;
-
-using System.Collections.Generic;
-using System.Linq;
-
+using EC_Site_Lecture.Tools;
 
 namespace EC_Site_Lecture.Controllers.Admin
 {
     public class AdminController : Controller
     {
         [HttpPost]
-
         public ActionResult Login(AdminLoginDTO model)
         {
             if (!ModelState.IsValid)
             {
-                return Redirect("/Views/AdminLogin?error=1");
+                return Redirect($"/Views/AdminLogin?error={ErrorCodes.VALIDATION_ERROR}");
             }
 
             var admin = new AdminUser().GetByUsernameOrEmail(model.UsernameOrEmail);
@@ -28,21 +23,16 @@ namespace EC_Site_Lecture.Controllers.Admin
             {
                 Session["AdminId"] = admin.Id;
                 Session["AdminUsername"] = admin.Username;
-                Session["IsAdmin"] = true; 
-
+                Session["IsAdmin"] = true;
 
                 return RedirectToAction("Index", "AdminProduct");
             }
 
-            return Redirect("/Views/AdminLogin?error=1");
+            return Redirect($"/Views/AdminLogin?error={ErrorCodes.LOGIN_FAILED}");
         }
-
-
-
 
         public ActionResult Logout()
         {
-            
             Session.Clear();
             Session.Abandon();
             FormsAuthentication.SignOut();
@@ -56,7 +46,6 @@ namespace EC_Site_Lecture.Controllers.Admin
 
             return Redirect("/Views/AdminLogin.aspx");
         }
-
     }
 }
 
