@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" %>
 <%@ Import Namespace="EC_Site_Lecture.ScreenDTO" %>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <title>クーポン管理</title>
     <link rel="stylesheet" href="/CSS/common.css" />

@@ -2,7 +2,7 @@
 <%@ Import Namespace="EC_Site_Lecture.ScreenDTO" %>
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <title>発送情報一覧（管理者）</title>
     <link rel="stylesheet" href="/CSS/common.css" />

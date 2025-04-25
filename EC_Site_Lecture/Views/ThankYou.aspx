@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" %>
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<html>
 <head runat="server">
     <meta charset="utf-8" />
     <title>ご注文ありがとうございます</title>
