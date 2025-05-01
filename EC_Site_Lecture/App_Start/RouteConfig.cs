@@ -18,7 +18,12 @@ namespace EC_Site_Lecture
                 defaults: new { controller = "MyPage", action = "Index" }
             );
 
-            
+            routes.MapRoute(
+               name: "Root",
+               url: "",
+               defaults: new { controller = "Product", action = "Index" }
+           );
+
             routes.MapRoute(
                 name: "Register", 
                 url: "Register/Register", 
